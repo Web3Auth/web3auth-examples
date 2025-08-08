@@ -4,7 +4,7 @@ import { type Web3AuthContextConfig } from "@web3auth/modal/react";
 // IMP END - Quick Start
 
 // IMP START - Dashboard Registration
-const clientId = "BFcLTVqWlTSpBBaELDPSz4_LFgG8Nf8hEltPlf3QeUG_88GDrQSw82fSjjYj5x4F3ys3ghMq8-InU7Azx7NbFSs"; // get from https://dashboard.web3auth.io
+const clientId = "BFQ7nwOhZCudiAWFw_JH2-HC1hFIHTTTRmZ98m5Obup16JA-V-HS1QPW12uLaC5pFpRZQuOIzUGBcUJ8KDw2wZ0"; // get from https://dashboard.web3auth.io
 // IMP END - Dashboard Registration
 
 // IMP START - Instantiate SDK

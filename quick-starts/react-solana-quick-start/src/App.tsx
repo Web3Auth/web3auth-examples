@@ -7,6 +7,8 @@ import { Balance } from "./components/getBalance";
 import { SendVersionedTransaction } from "./components/sendVersionedTransaction";
 import { SignMessage } from "./components/signMessage";
 import { SwitchChain } from "./components/switchNetwork";
+import { SolanaPay } from "./components/solanaPay";
+
 function App() {
   const { connect, isConnected, connectorName, loading: connectLoading, error: connectError } = useWeb3AuthConnect();
   const { disconnect, loading: disconnectLoading, error: disconnectError } = useWeb3AuthDisconnect();
@@ -40,6 +42,7 @@ function App() {
         </div>
       </div>
       <Balance />
+      <SolanaPay />
       <SignMessage />
       <SignTransaction />
       <SendVersionedTransaction />
