@@ -5,6 +5,9 @@ import { defineConfig } from "vite";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    allowedHosts: [".ngrok-free.app", ".ngrok.io"],
+  } as any,
   // alias are only to be added when absolutely necessary, these modules are already present in the browser environment
   // resolve: {
   // alias: {
