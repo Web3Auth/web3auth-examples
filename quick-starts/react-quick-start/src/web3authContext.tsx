@@ -1,5 +1,5 @@
 // IMP START - Quick Start
-import { UX_MODE, WEB3AUTH_NETWORK, authConnector } from "@web3auth/modal";
+import { WEB3AUTH_NETWORK } from "@web3auth/modal";
 import { type Web3AuthContextConfig } from "@web3auth/modal/react";
 // IMP END - Quick Start
 
@@ -12,16 +12,6 @@ const web3AuthContextConfig: Web3AuthContextConfig = {
   web3AuthOptions: {
     clientId,
     web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
-    uiConfig:{
-      uxMode: UX_MODE.REDIRECT,
-    },
-    connectors: [
-      authConnector({
-        connectorSettings: {
-          redirectUrl: "http://localhost:3000",
-        }
-      })
-    ]
   }
 };
 // IMP END - Config
