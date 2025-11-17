@@ -33,6 +33,10 @@ export function Balance() {
 
   return (
     <div>
+      <h2>Account Address</h2>
+      <div>
+        {accounts?.[0]}
+      </div>
       <h2>Balance</h2>
       <div>
         {balance !== null && `${balance / LAMPORTS_PER_SOL} SOL`} 
