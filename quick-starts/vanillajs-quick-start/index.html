@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="module">
+      // IMP START - Bundler Issues
+      import { Buffer } from "buffer";
+      import process from "process";
+      window.Buffer = Buffer;
+      window.process = process;
+      // IMP END - Bundler Issues
+    </script>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web3Auth VanillaJS Quick Start</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="content">
+      <h1 class="title">
+        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/modal">Web3Auth</a> & VanillaJS
+        Example
+      </h1>
+      <div class="setting">
+        <div id="logged-in-view" class="card-container" style="display: none;">
+          <button class="card card-small" id="get-user-info-btn">Get User Info</button>
+          <button class="card card-small" id="get-accounts-btn">Get Accounts</button>
+          <button class="card card-small" id="get-balance-btn">Get Balance</button>
+          <button class="card card-small" id="sign-message-btn">Sign Message</button>
+          <button class="card card-small" id="send-transaction-btn">Send Transaction</button>
+          <button class="card card-small" id="logout-btn">Log Out</button>
+        </div>
+        <div id="logged-out-view" class="card-container">
+          <button class="card card-small" id="login-btn">Login</button>
+        </div>
+        <div class="console" id="console-ui">
+          <p class="code">Logged In</p>
+        </div>
+      </div>
+      <footer class="footer">
+        <a
+          href="https://github.com/Web3Auth/web3auth-examples/tree/main/quick-starts/vanillajs-quick-start"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Source code
+        </a>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+

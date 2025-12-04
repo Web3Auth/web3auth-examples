@@ -1,0 +1,216 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+	/* Variables for light/dark mode support */
+	--primary-color: #0364ff;
+	--primary-hover: #0050cc;
+	--bg-color: #ffffff;
+	--bg-light: #f7f7f7;
+	--bg-hover: #eeeeee;
+	--border-color: #e0e0e0;
+	--text-color: #1c1e21;
+	--text-muted: #5f6368;
+	--radius: 6px;
+	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+	--shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+	--font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* Dark Mode Variables */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--primary-color: #529dff;
+		--primary-hover: #75b5ff;
+		--bg-color: #171c2a;
+		--bg-light: #23293d;
+		--bg-hover: #2f364f;
+		--border-color: #3b415c;
+		--text-color: #e1e3e8;
+		--text-muted: #9399a8;
+		--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+		--shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+	}
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: var(--font-sans);
+	color: var(--text-color);
+	background-color: var(--bg-color);
+	line-height: 1.6;
+}
+
+a {
+	color: var(--primary-color);
+	text-decoration: none;
+}
+
+button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 12px 16px;
+	background-color: var(--bg-light);
+	border: 1px solid var(--border-color);
+	border-radius: var(--radius);
+	color: var(--text-color);
+	font-weight: 500;
+	font-size: 14px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-shadow: var(--shadow-sm);
+}
+
+button:hover {
+	background-color: var(--bg-hover);
+	box-shadow: var(--shadow-md);
+	transform: translateY(-1px);
+}
+
+.content {
+	width: 100%;
+	padding: 0 16px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-height: 100vh;
+	padding: 32px 0;
+}
+
+.title {
+	font-size: 28px;
+	text-align: center;
+	margin: 24px 0;
+	line-height: 1.2;
+	font-weight: 600;
+}
+
+.title a {
+	color: var(--primary-color);
+	text-decoration: none;
+}
+
+.setting {
+	width: 100%;
+	max-width: 560px;
+}
+
+.card-container {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	margin-bottom: 16px;
+}
+
+.card {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 12px 16px;
+	background-color: var(--bg-light);
+	border: 1px solid var(--border-color);
+	border-radius: var(--radius);
+	color: var(--text-color);
+	font-weight: 500;
+	font-size: 14px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-shadow: var(--shadow-sm);
+	width: 100%;
+	margin: 8px 0;
+	text-align: center;
+}
+
+.card:hover {
+	background-color: var(--bg-hover);
+	box-shadow: var(--shadow-md);
+	transform: translateY(-1px);
+}
+
+.console {
+	width: 100%;
+	margin-top: 24px;
+}
+
+.code {
+	width: 100%;
+	max-height: 250px;
+	overflow: auto;
+	word-wrap: break-word;
+	font-family: monospace;
+	font-size: 14px;
+	padding: 16px;
+	margin: 0;
+	background-color: #0a0a0a;
+	color: #e0e0e0;
+	border-radius: 0;
+	border: none;
+}
+
+.footer {
+	width: 100%;
+	padding: 32px 0;
+	border-top: 1px solid var(--border-color);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 24px;
+	margin-top: 48px;
+	flex-wrap: wrap;
+}
+
+.footer a {
+	color: var(--text-muted);
+	text-decoration: none;
+	font-size: 14px;
+	transition: color 0.2s ease;
+}
+
+.footer a:hover {
+	color: var(--primary-color);
+}
+
+/* Media queries for larger screens */
+@media (min-width: 640px) {
+	.content {
+		max-width: 640px;
+	}
+	
+	.title {
+		font-size: 32px;
+	}
+	
+	.card-container {
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 12px;
+	}
+	
+	.card {
+		width: auto;
+		margin: 0;
+	}
+}
+
+@media (min-width: 768px) {
+	.content {
+		max-width: 768px;
+	}
+	
+	.title {
+		font-size: 36px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.content {
+		max-width: 1024px;
+	}
+}
+
