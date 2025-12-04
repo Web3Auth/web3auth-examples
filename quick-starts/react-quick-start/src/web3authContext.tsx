@@ -1,5 +1,6 @@
 // IMP START - Quick Start
 import { WEB3AUTH_NETWORK } from "@web3auth/modal";
+import { coinbaseConnector } from "@web3auth/no-modal/connectors/coinbase-connector";
 import { type Web3AuthContextConfig } from "@web3auth/modal/react";
 // IMP END - Quick Start
 
@@ -12,6 +13,7 @@ const web3AuthContextConfig: Web3AuthContextConfig = {
   web3AuthOptions: {
     clientId,
     web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+    connectors: [coinbaseConnector({})],
   }
 };
 // IMP END - Config
