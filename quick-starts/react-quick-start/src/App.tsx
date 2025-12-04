@@ -1,5 +1,6 @@
 import "./App.css";
 import { useWeb3AuthConnect, useWeb3AuthDisconnect, useWeb3AuthUser } from "@web3auth/modal/react";
+import { WALLET_CONNECTORS } from "@web3auth/modal";
 // IMP START - Blockchain Calls  
 import { useAccount } from "wagmi";
 import { SendTransaction } from "./components/sendTransaction";
@@ -8,7 +9,7 @@ import { SwitchChain } from "./components/switchNetwork";
 // IMP END - Blockchain Calls
 function App() {
   // IMP START - Login  
-  const { connect, isConnected, connectorName, loading: connectLoading, error: connectError } = useWeb3AuthConnect();
+  const { connectTo, isConnected, connectorName, loading: connectLoading, error: connectError } = useWeb3AuthConnect();
   // IMP END - Login
   // IMP START - Logout
   const { disconnect, loading: disconnectLoading, error: disconnectError } = useWeb3AuthDisconnect();
@@ -59,8 +60,8 @@ function App() {
   const unloggedInView = (
     // IMP START - Login  
     <div className="grid">
-      <button onClick={() => connect()} className="card">
-        Login
+      <button onClick={() => connectTo(WALLET_CONNECTORS.COINBASE)} className="card">
+        Login via Coinbase
       </button>
       {connectLoading && <div className="loading">Connecting...</div>}
       {connectError && <div className="error">{connectError.message}</div>}
