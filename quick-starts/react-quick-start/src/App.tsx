@@ -6,6 +6,8 @@ import { SendTransaction } from "./components/sendTransaction";
 import { Balance } from "./components/getBalance";
 import { SwitchChain } from "./components/switchNetwork";
 // IMP END - Blockchain Calls
+import { useState, useRef, useEffect } from "react";
+
 function App() {
   // IMP START - Login  
   const { connect, isConnected, connectorName, loading: connectLoading, error: connectError } = useWeb3AuthConnect();
@@ -18,13 +20,26 @@ function App() {
   const { address } = useAccount();
   // IMP END - Blockchain Calls
 
+  const [showConsole, setShowConsole] = useState(false);
+  const consoleContentRef = useRef<HTMLParagraphElement>(null);
+
   function uiConsole(...args: any[]): void {
-    const el = document.querySelector("#console>p");
-    if (el) {
-      el.innerHTML = JSON.stringify(args || {}, null, 2);
+    if (consoleContentRef.current) {
+      consoleContentRef.current.innerHTML = JSON.stringify(args || {}, null, 2);
       console.log(...args);
     }
   }
+
+  useEffect(() => {
+    if (showConsole && userInfo && consoleContentRef.current) {
+      uiConsole(userInfo);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showConsole]);
+
+  const handleToggleConsole = () => {
+    setShowConsole(!showConsole);
+  };
 
   const loggedInView = (
     <div className="grid">
@@ -34,8 +49,8 @@ function App() {
       {/* // IMP END - Blockchain Calls */}
       <div className="flex-container">
         <div>
-          <button onClick={() => uiConsole(userInfo)} className="card">
-            Get User Info
+          <button onClick={handleToggleConsole} className="card">
+            {showConsole ? "Hide User Info" : "Get User Info"}
           </button>
         </div>
         {/* // IMP START - Logout */}
@@ -48,6 +63,11 @@ function App() {
         </div>
         {/* // IMP END - Logout */}
       </div>
+      {showConsole && (
+        <div id="console" style={{ whiteSpace: "pre-line", textAlign: "left" }}>
+          <p ref={consoleContentRef} style={{ whiteSpace: "pre-line", margin: 0 }}></p>
+        </div>
+      )}
       {/* IMP START - Blockchain Calls */}
       <SendTransaction />
       <Balance />
@@ -79,9 +99,6 @@ function App() {
       </h1>
 
       {isConnected ? loggedInView : unloggedInView}
-      <div id="console" style={{ whiteSpace: "pre-line" }}>
-        <p style={{ whiteSpace: "pre-line" }}></p>
-      </div>
 
       <footer className="footer">
         <a
