@@ -42,7 +42,7 @@ Visit `http://localhost:3000` in your browser to see the application running.
 
 - [Web3Auth Documentation](https://web3auth.io/docs/connect-blockchain/other/starknet)
 - [Starknet.js Documentation](https://starknetjs.com/)
-- [Starknet.js Create Account Documentation](https://starknetjs.com/docs/guides/create_account)
+- [Starknet.js Create Account Documentation](https://www.starknetjs.com/docs/guides/intro)
 - [SDK References](https://web3auth.io/docs/sdk)
 - [Developer Dashboard](https://dashboard.web3auth.io)
 - [Web3Auth Community](https://web3auth.io/community)
