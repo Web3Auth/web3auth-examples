@@ -1,9 +1,7 @@
 import { WEB3AUTH_NETWORK, type Web3AuthOptions } from "@web3auth/modal";
 
 // Dashboard Registration
-const clientId = "BHgArYmWwSeq21czpcarYh0EVq2WWOzflX-NTK-tY1-1pauPzHKRRLgpABkmYiIV_og9jAvoIxQ8L3Smrwe04Lw";
-
-// Instantiate SDK
+const clientId = import.meta.env.VITE_WEB3AUTH_CLIENT_ID;
 const web3AuthOptions: Web3AuthOptions = {
   clientId,
   web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,

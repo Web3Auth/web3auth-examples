@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 // IMP START - Quick Start
 import { Web3Auth, WEB3AUTH_NETWORK } from "@web3auth/modal";
 // IMP END - Quick Start
+import { environment } from '../environments/environment';
 
 // IMP START - Blockchain Calls
 // import RPC from "./ethersRPC";
@@ -9,7 +10,7 @@ import RPC from "./viemRPC";
 // IMP END - Blockchain Calls
 
 // IMP START - Dashboard Registration
-const clientId = "BHgArYmWwSeq21czpcarYh0EVq2WWOzflX-NTK-tY1-1pauPzHKRRLgpABkmYiIV_og9jAvoIxQ8L3Smrwe04Lw"; // get from https://dashboard.web3auth.io
+const clientId = environment.clientId; // set in src/environments/environment.ts
 // IMP END - Dashboard Registration
 
 // IMP START - Config

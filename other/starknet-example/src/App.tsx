@@ -19,7 +19,7 @@ function App() {
   // StarkNet provider setup
   const starknetProvider = new RpcProvider({
     nodeUrl: isProduction
-      ? import.meta.env.VITE_STARKNET_JSON_RPC_URL_MAINNET
+      ? "https://starknet-mainnet.public.blastapi.io/rpc/v0_8"
       : "https://starknet-sepolia.public.blastapi.io/rpc/v0_8",
   });
 

@@ -19,7 +19,7 @@ root.render(
   <Web3AuthProvider config={web3AuthContextConfig}>
     <QueryClientProvider client={queryClient}>
       <WagmiProvider>
-        <GoogleOAuthProvider clientId="461819774167-5iv443bdf5a6pnr2drt4tubaph270obl.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
             <App />
         </GoogleOAuthProvider>
       </WagmiProvider>

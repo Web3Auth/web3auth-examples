@@ -4,7 +4,7 @@ import { WagmiProvider } from "@web3auth/modal/react/wagmi";
 import { type ReactNode } from "react";
 import { Web3AuthProvider } from "@web3auth/modal/react";
 
-const clientId = "BJFT2n2Nc-2HY9yJCacDygMvuJQc8do8bF7GMWig2KiZgJJ5ks-Hiw_JvcJvqiJ5yYTkRptfwoeQFkqJZAG65do"; // get from https://dashboard.web3auth.io
+const clientId = import.meta.env.VITE_WEB3AUTH_CLIENT_ID;
 
 const web3AuthOptions: Web3AuthOptions = {
   clientId,

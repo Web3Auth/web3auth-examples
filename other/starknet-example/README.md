@@ -1,19 +1,21 @@
-# Web3Auth Starknet Demo
+# MetaMask Embedded Wallets — StarkNet
 
-This example demonstrates how to integrate Web3Auth into a React application for the Starknet blockchain.
+React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) on **StarkNet** (Ethereum L2). After social login, the app derives an ed25519 key and uses the StarkNet provider to deploy a wallet, sign transactions, and interact with Cairo contracts.
 
 ## Prerequisites
 
 - Node.js 20+
 - npm
-- A Web3Auth Client ID (get one from [Web3Auth Dashboard](https://dashboard.web3auth.io))
+- A Client ID from the [Dashboard](https://dashboard.web3auth.io)
+- StarkNet JSON-RPC endpoints (Mainnet and/or Sepolia) — a public Sepolia endpoint is pre-filled in `.env.example`
 
-## Quick Start
+## Setup
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/stephanniegb/web3auth-starknet.git
+git clone https://github.com/Web3Auth/web3auth-examples.git
+cd web3auth-examples/other/starknet-example
 ```
 
 ### 2. Install dependencies
@@ -24,10 +26,17 @@ npm install
 
 ### 3. Configure environment variables
 
-Create a `.env` file and add your Web3Auth Client ID and RPC provider urls:
-
 ```bash
-cp .env.example .env.local
+cp .env.example .env
+```
+
+Edit `.env`:
+
+```
+VITE_WEB3AUTH_CLIENT_ID=YOUR_CLIENT_ID
+VITE_WEB3AUTH_CLIENT_ID_DEV=YOUR_DEVNET_CLIENT_ID
+VITE_STARKNET_JSON_RPC_URL_MAINNET=YOUR_MAINNET_RPC_URL
+VITE_STARKNET_JSON_RPC_URL_SEPOLIA=https://starknet-sepolia.public.blastapi.io/rpc/v0_8
 ```
 
 ### 4. Run the application
@@ -36,16 +45,13 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Visit `http://localhost:3000` in your browser to see the application running.
+Visit `http://localhost:5173` in your browser.
 
-## 📚 Resources
+## Resources
 
-- [Web3Auth Documentation](https://web3auth.io/docs/connect-blockchain/other/starknet)
-- [Starknet.js Documentation](https://starknetjs.com/)
-- [Starknet.js Create Account Documentation](https://www.starknetjs.com/docs/guides/intro)
-- [SDK References](https://web3auth.io/docs/sdk)
-- [Developer Dashboard](https://dashboard.web3auth.io)
-- [Web3Auth Community](https://web3auth.io/community)
+- [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Dashboard](https://dashboard.web3auth.io)
+- [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)
 
 ## License
 

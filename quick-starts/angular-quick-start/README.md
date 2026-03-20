@@ -1,48 +1,49 @@
-# Web3Auth Angular Quick Start
+# MetaMask Embedded Wallets — Angular Quick Start
 
-This example demonstrates how to integrate Web3Auth into an Angular application for EVM chains.
+Angular example using MetaMask Embedded Wallets (powered by Web3Auth) on EVM chains. Uses the `@web3auth/modal` JavaScript SDK directly (no framework wrapper), which works with Angular, Svelte, and any other web framework.
 
 ## Prerequisites
+
 - Node.js 20+
 - npm
-- A Web3Auth Client ID (get one from [Web3Auth Dashboard](https://dashboard.web3auth.io))
+- A Client ID from the [Dashboard](https://dashboard.web3auth.io)
 
-## Quick Start
+## Setup
 
 ### 1. Clone the repository
+
 ```bash
 git clone https://github.com/Web3Auth/web3auth-examples.git
-```
-
-### 2. Navigate to the example
-```bash
 cd web3auth-examples/quick-starts/angular-quick-start
 ```
 
-### 3. Install dependencies
+### 2. Install dependencies
+
 ```bash
 npm install
 ```
 
-### 4. Configure environment variables
-Create a `.env` file and add your Web3Auth Client ID:
+### 3. Set your Client ID
+
+Open `src/app/app.component.ts` and replace the placeholder `clientId` value with your own Client ID from the [Dashboard](https://dashboard.web3auth.io).
+
+### 4. Run the application
+
 ```bash
-WEB3AUTH_CLIENT_ID=YOUR_WEB3AUTH_CLIENT_ID
+npm start
 ```
 
-### 5. Run the application
-```bash
-npm run dev
-```
+Visit `http://localhost:4200` in your browser.
 
-Visit `http://localhost:4200` in your browser to see the application running.
+> Use **Sapphire Devnet** (the default) for local development. Sapphire Mainnet does not allow localhost.
 
-## 📚 Resources
+## Resources
 
-- [Web3Auth Documentation](https://web3auth.io/docs)
-- [SDK References](https://web3auth.io/docs/sdk)
-- [Developer Dashboard](https://dashboard.web3auth.io)
-- [Web3Auth Community](https://web3auth.io/community)
+- [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [JavaScript SDK](https://docs.metamask.io/embedded-wallets/sdk/js/)
+- [Dashboard](https://dashboard.web3auth.io)
+- [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)
 
 ## License
+
 MIT

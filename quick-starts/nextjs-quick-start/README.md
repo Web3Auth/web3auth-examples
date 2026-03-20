@@ -1,48 +1,57 @@
-# Web3Auth Next.js Quick Start
+# MetaMask Embedded Wallets — Next.js Quick Start
 
-This example demonstrates how to integrate Web3Auth into a Next.js application for EVM chains with server-side rendering support.
+Next.js App Router example using MetaMask Embedded Wallets (powered by Web3Auth) on EVM chains. The provider is initialized in a `"use client"` component to stay compatible with the App Router's server component architecture.
 
 ## Prerequisites
+
 - Node.js 20+
 - npm
-- A Web3Auth Client ID (get one from [Web3Auth Dashboard](https://dashboard.web3auth.io))
+- A Client ID from the [Dashboard](https://dashboard.web3auth.io)
 
-## Quick Start
+## Setup
 
 ### 1. Clone the repository
+
 ```bash
 git clone https://github.com/Web3Auth/web3auth-examples.git
-```
-
-### 2. Navigate to the example
-```bash
 cd web3auth-examples/quick-starts/nextjs-quick-start
 ```
 
-### 3. Install dependencies
+### 2. Install dependencies
+
 ```bash
 npm install
 ```
 
-### 4. Configure environment variables
-Create a `.env.local` file and add your Web3Auth Client ID:
+### 3. Configure environment variables
+
 ```bash
-NEXT_PUBLIC_WEB3AUTH_CLIENT_ID=your-client-id
+cp .env.example .env.local
 ```
 
-### 5. Run the application
+Edit `.env.local` and set your Client ID:
+
+```
+NEXT_PUBLIC_WEB3AUTH_CLIENT_ID=YOUR_CLIENT_ID
+```
+
+### 4. Run the application
+
 ```bash
 npm run dev
 ```
 
-Visit `http://localhost:3000` in your browser to see the application running.
+Visit `http://localhost:3000` in your browser.
 
-## 📚 Resources
+> Use **Sapphire Devnet** (the default) for local development. Sapphire Mainnet does not allow localhost.
 
-- [Web3Auth Documentation](https://web3auth.io/docs)
-- [SDK References](https://web3auth.io/docs/sdk)
-- [Developer Dashboard](https://dashboard.web3auth.io)
-- [Web3Auth Community](https://web3auth.io/community)
+## Resources
+
+- [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [React SDK](https://docs.metamask.io/embedded-wallets/sdk/react/)
+- [Dashboard](https://dashboard.web3auth.io)
+- [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)
 
 ## License
+
 MIT

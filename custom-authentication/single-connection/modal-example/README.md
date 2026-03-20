@@ -1,48 +1,56 @@
-# Web3Auth Custom Authentication Modal Example
+# MetaMask Embedded Wallets — Custom Auth with Modal
 
-This example demonstrates how to implement custom authentication in the Web3Auth Modal.
+React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) with a **custom authentication connection surfaced through the built-in modal UI**. Demonstrates how to integrate your own identity provider while still using the pre-built login modal.
 
 ## Prerequisites
+
 - Node.js 20+
 - npm
-- A Web3Auth Client ID (get one from [Web3Auth Dashboard](https://dashboard.web3auth.io))
+- A Client ID from the [Dashboard](https://dashboard.web3auth.io)
+- A custom connection configured on the Dashboard ([Authentication guide](https://docs.metamask.io/embedded-wallets/authentication/))
 
-## Quick Start
+## Setup
 
 ### 1. Clone the repository
+
 ```bash
 git clone https://github.com/Web3Auth/web3auth-examples.git
-```
-
-### 2. Navigate to the example
-```bash
 cd web3auth-examples/custom-authentication/single-connection/modal-example
 ```
 
-### 3. Install dependencies
+### 2. Install dependencies
+
 ```bash
 npm install
 ```
 
-### 4. Configure environment variables
-Create a `.env` file and add your Web3Auth Client ID:
+### 3. Configure environment variables
+
 ```bash
-VITE_WEB3AUTH_CLIENT_ID=YOUR_WEB3AUTH_CLIENT_ID
+cp .env.example .env
 ```
 
-### 5. Run the application
+Edit `.env`:
+
+```
+VITE_WEB3AUTH_CLIENT_ID=YOUR_CLIENT_ID
+```
+
+### 4. Run the application
+
 ```bash
 npm run dev
 ```
 
-Visit `http://localhost:5173` in your browser to see the application running.
+Visit `http://localhost:5173` in your browser.
 
-## 📚 Resources
+## Resources
 
-- [Web3Auth Documentation](https://web3auth.io/docs)
-- [SDK References](https://web3auth.io/docs/sdk)
-- [Developer Dashboard](https://dashboard.web3auth.io)
-- [Web3Auth Community](https://web3auth.io/community)
+- [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Authentication Overview](https://docs.metamask.io/embedded-wallets/authentication/)
+- [Dashboard](https://dashboard.web3auth.io)
+- [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)
 
 ## License
+
 MIT

@@ -1,48 +1,56 @@
-# Web3Auth Auth0 Implicit Example
+# MetaMask Embedded Wallets — Auth0 (Implicit)
 
-This example demonstrates how to integrate Web3Auth with Auth0 SPA custom authentication.
+React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) with an **Auth0 connection** via the implicit / OIDC flow. Auth0 handles authentication; Web3Auth derives the wallet from the resulting ID token.
 
 ## Prerequisites
+
 - Node.js 20+
 - npm
-- A Web3Auth Client ID (get one from [Web3Auth Dashboard](https://dashboard.web3auth.io))
+- A Client ID from the [Dashboard](https://dashboard.web3auth.io)
+- An Auth0 application and a custom Auth0 connection configured on the Dashboard ([Auth0 guide](https://docs.metamask.io/embedded-wallets/authentication/custom-connections/auth0/))
 
-## Quick Start
+## Setup
 
 ### 1. Clone the repository
+
 ```bash
 git clone https://github.com/Web3Auth/web3auth-examples.git
-```
-
-### 2. Navigate to the example
-```bash
 cd web3auth-examples/custom-authentication/single-connection/auth0-implicit-example
 ```
 
-### 3. Install dependencies
+### 2. Install dependencies
+
 ```bash
 npm install
 ```
 
-### 4. Configure environment variables
-Create a `.env` file and add your Web3Auth Client ID:
+### 3. Configure environment variables
+
 ```bash
-VITE_WEB3AUTH_CLIENT_ID=YOUR_WEB3AUTH_CLIENT_ID
+cp .env.example .env
 ```
 
-### 5. Run the application
+Edit `.env`:
+
+```
+VITE_WEB3AUTH_CLIENT_ID=YOUR_CLIENT_ID
+```
+
+### 4. Run the application
+
 ```bash
 npm run dev
 ```
 
-Visit `http://localhost:5173` in your browser to see the application running.
+Visit `http://localhost:5173` in your browser.
 
-## 📚 Resources
+## Resources
 
-- [Web3Auth Documentation](https://web3auth.io/docs)
-- [SDK References](https://web3auth.io/docs/sdk)
-- [Developer Dashboard](https://dashboard.web3auth.io)
-- [Web3Auth Community](https://web3auth.io/community)
+- [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Auth0 Integration Guide](https://docs.metamask.io/embedded-wallets/authentication/custom-connections/auth0/)
+- [Dashboard](https://dashboard.web3auth.io)
+- [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)
 
 ## License
+
 MIT

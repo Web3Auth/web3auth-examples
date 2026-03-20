@@ -9,14 +9,15 @@ import { SwitchChain } from "./components/switchNetwork";
 import { useAccount } from "wagmi";
 import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
 
-// Your web app's Firebase configuration
+// Firebase configuration — values come from .env (see .env.example)
+// Firebase browser API keys are intentionally public identifiers; security is enforced via Firebase Auth rules
 const firebaseConfig = {
-  apiKey: "AIzaSyB0nd9YsPLu-tpdCrsXn8wgsWVAiYEpQ_E",
-  authDomain: "web3auth-oauth-logins.firebaseapp.com",
-  projectId: "web3auth-oauth-logins",
-  storageBucket: "web3auth-oauth-logins.appspot.com",
-  messagingSenderId: "461819774167",
-  appId: "1:461819774167:web:e74addfb6cc88f3b5b9c92",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 function App() {
