@@ -16,7 +16,7 @@
     "@solana/spl-token": "^0.4.13",
     "@solana/web3.js": "^1.98.0",
     "@web3auth/modal": "^10.15.0",
-    "axios": "^1.11.0",
+    "axios": "^1.15.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
