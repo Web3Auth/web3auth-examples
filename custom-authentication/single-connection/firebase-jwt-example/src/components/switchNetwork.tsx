@@ -1,8 +1,9 @@
-import { useChainId, useSwitchChain } from 'wagmi'
+import { useChainId, useChains, useSwitchChain } from 'wagmi'
 
 export function SwitchChain() {
   const chainId = useChainId()
-  const { chains, switchChain, error } = useSwitchChain()
+  const chains = useChains()
+  const { switchChain, error } = useSwitchChain()
 
   return (
     <div>

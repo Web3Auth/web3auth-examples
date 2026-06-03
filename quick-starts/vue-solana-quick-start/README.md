@@ -1,12 +1,27 @@
 # MetaMask Embedded Wallets — Vue Solana Quick Start
 
-Vue 3 example using MetaMask Embedded Wallets (powered by Web3Auth) on the **Solana** blockchain. Uses the `@web3auth/modal` Vue SDK with built-in Solana composables for signing transactions and reading balances.
+Vue 3 + Vite boilerplate for **MetaMask Embedded Wallets (Web3Auth)** + **[Solana Kit](https://www.solanakit.com/docs/getting-started)**.
+
+## What each SDK does
+
+| Feature | Web3Auth (`@web3auth/modal/vue/solana`) | Solana Kit (`src/solana/`) |
+|--------|-----------------------------------------|----------------------------|
+| Login / logout | `useWeb3AuthConnect`, `useWeb3AuthDisconnect` | — |
+| Wallet address | `useSolanaWallet` → `accounts` | — |
+| Read chain / RPC | `useWeb3Auth` → `currentChain.rpcTarget` | `createSolanaRpc` for balance & blockhash |
+| Sign message | `useSignMessage` | — |
+| Sign transaction | `useSignTransaction` | `buildSolTransferTransaction` |
+| Send transaction | `useSignAndSendTransaction` | `buildSolTransferTransaction` |
+| Switch chain | `useSwitchChain` + `useWeb3Auth` | — |
+| Solana Vue context | `SolanaProvider` (wraps app) | — |
+
+Kit is only used to **build** transfer transactions. Signing and RPC endpoints come from Web3Auth (RPC URLs are configured in the dashboard, never hardcoded).
 
 ## Prerequisites
 
 - Node.js 20+
 - npm
-- A Client ID from the [Dashboard](https://dashboard.web3auth.io) — configure it with the Solana chain
+- A Client ID from the [Dashboard](https://dashboard.web3auth.io) — add Solana chain(s) under **Chains & Networks** (RPC URLs come from the dashboard; this app does not hardcode them)
 
 ## Setup
 
@@ -32,20 +47,34 @@ cp .env.example .env
 Edit `.env` and set your Client ID:
 
 ```
-VUE_APP_WEB3AUTH_CLIENT_ID=YOUR_CLIENT_ID
+VITE_WEB3AUTH_CLIENT_ID=YOUR_CLIENT_ID
 ```
 
 ### 4. Run the application
 
 ```bash
-npm run serve
+npm run dev
 ```
 
-Visit `http://localhost:8080` in your browser.
+Visit `http://localhost:8080` in your browser (`npm run dev` uses the same port).
 
 > Use **Sapphire Devnet** (the default) for local development. Sapphire Mainnet does not allow localhost.
 
+## Project layout
+
+```
+src/
+  solana/transfer.ts   # Kit: build a SOL transfer transaction
+  components/          # Web3Auth Solana composables (one component per action)
+  web3authContext.tsx
+  App.vue              # Web3AuthProvider + SolanaProvider
+  Home.vue
+```
+
 ## Resources
+
+- [Solana Kit — Getting started](https://www.solanakit.com/docs/getting-started)
+- [Solana Kit — Sending transactions](https://www.solanakit.com/docs/guides/sending-transactions)
 
 - [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
 - [Vue SDK](https://docs.metamask.io/embedded-wallets/sdk/vue/)

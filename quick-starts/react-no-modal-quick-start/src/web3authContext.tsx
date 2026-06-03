@@ -12,7 +12,8 @@ const web3AuthContextConfig: Web3AuthContextConfig = {
   web3AuthOptions: {
     clientId,
     web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
-  }
+    // Required in @web3auth/modal v11+ to resolve the dashboard config API base URL.
+  },
 };
 // IMP END - Config
 

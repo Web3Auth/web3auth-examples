@@ -1,51 +1,40 @@
+import { address, createSolanaRpc } from "@solana/kit";
+import { useState } from "react";
+import { useWeb3Auth } from "@web3auth/modal/react";
 import { useSolanaWallet } from "@web3auth/modal/react/solana";
-import {
-  LAMPORTS_PER_SOL,
-  PublicKey,
-} from "@solana/web3.js";
-import { useEffect, useState } from "react";
 
 export function Balance() {
-  const { accounts, connection } = useSolanaWallet();
-  const [balance, setBalance] = useState<number | null>(null);
+  const { web3Auth } = useWeb3Auth();
+  const { accounts } = useSolanaWallet();
+  const [balance, setBalance] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchBalance = async () => {
-    if (connection && accounts && accounts.length > 0) {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const publicKey = new PublicKey(accounts[0]);
-        const balance = await connection.getBalance(publicKey);
-        setBalance(balance);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Unknown error");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  };
+  async function fetchBalance() {
+    const rpcTarget = web3Auth?.currentChain?.rpcTarget;
+    if (!rpcTarget || !accounts?.length) return;
 
-  useEffect(() => {
-    fetchBalance();
-  }, [connection, accounts]);
+    setIsLoading(true);
+    setError(null);
+    try {
+      const rpc = createSolanaRpc(rpcTarget);
+      const { value } = await rpc.getBalance(address(accounts[0])).send();
+      setBalance(`${Number(value) / 1e9} SOL`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to fetch balance.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <div>
-      <h2>Account Address</h2>
-      <div>
-        {accounts?.[0]}
-      </div>
       <h2>Balance</h2>
-      <div>
-        {balance !== null && `${balance / LAMPORTS_PER_SOL} SOL`} 
-      </div>
-        {isLoading && <span className="loading">Loading...</span>}
-        {error && <span className="error">Error: {error}</span>}
-      <button onClick={fetchBalance} type="submit" className="card">
-          Fetch Balance
+      {balance && <div>{balance}</div>}
+      <button onClick={() => void fetchBalance()} type="button" className="card" disabled={isLoading}>
+        {isLoading ? "Fetching..." : "Fetch Balance"}
       </button>
+      {error && <div className="error">Error: {error}</div>}
     </div>
-  )
+  );
 }

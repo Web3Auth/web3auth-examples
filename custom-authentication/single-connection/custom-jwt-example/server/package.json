@@ -18,9 +18,5 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jsonwebtoken": "^8.5.1"
-  },
-  "devDependencies": {
-    "empty-module": "^0.0.2",
-    "zlib-browserify": "^0.0.3"
   }
 }

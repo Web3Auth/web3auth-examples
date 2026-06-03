@@ -1,13 +1,15 @@
 import "./App.css";
 import { useWeb3AuthConnect, useWeb3AuthDisconnect, useWeb3AuthUser } from "@web3auth/modal/react";
 // IMP START - Blockchain Calls  
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { SendTransaction } from "./components/sendTransaction";
 import { Balance } from "./components/getBalance";
 import { SwitchChain } from "./components/switchNetwork";
+import { SignMessage } from "./components/signMessage";
 import { AUTH_CONNECTION, WALLET_CONNECTORS } from "@web3auth/modal";
 // IMP END - Blockchain Calls
 import { useState } from "react";
+
 function App() {
   const [email, setEmail] = useState("");
   // IMP START - Login  
@@ -18,7 +20,7 @@ function App() {
   // IMP END - Logout
   const { userInfo } = useWeb3AuthUser();
   // IMP START - Blockchain Calls
-  const { address } = useAccount();
+  const { address } = useConnection();
   // IMP END - Blockchain Calls
 
   function uiConsole(...args: any[]): void {
@@ -54,6 +56,7 @@ function App() {
       {/* IMP START - Blockchain Calls */}
       <SendTransaction />
       <Balance />
+      <SignMessage />
       <SwitchChain />
       {/* IMP END - Blockchain Calls */}
     </div>
@@ -92,9 +95,9 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
       <h1 className="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/modal" rel="noreferrer">
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth{" "}
         </a>
         & React No Modal Quick Start
@@ -107,7 +110,7 @@ function App() {
 
       <footer className="footer">
         <a
-          href="https://github.com/Web3Auth/web3auth-examples/tree/main/quick-starts/react-quick-start"
+          href="https://github.com/Web3Auth/web3auth-examples/tree/main/quick-starts/react-no-modal-quick-start"
           target="_blank"
           rel="noopener noreferrer"
         >

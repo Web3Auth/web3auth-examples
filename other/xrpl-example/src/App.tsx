@@ -11,9 +11,10 @@ function App() {
   const { connect, isConnected, loading: connectLoading, error: connectError } = useWeb3AuthConnect();
   const { disconnect, loading: disconnectLoading, error: disconnectError } = useWeb3AuthDisconnect();
   const { userInfo } = useWeb3AuthUser();
-  const { provider } = useWeb3Auth();
+  const { connection } = useWeb3Auth();
 
   const OnGetAccounts = async () => {
+    const provider = connection?.ethereumProvider;
     if (!provider) {
       uiConsole("provider not initialized yet");
       return;
@@ -23,6 +24,7 @@ function App() {
   };
 
   const OnGetBalance = async () => {
+    const provider = connection?.ethereumProvider;
     if (!provider) {
       uiConsole("provider not initialized yet");
       return;
@@ -32,6 +34,7 @@ function App() {
   };
 
   const OnSignMessage = async () => {
+    const provider = connection?.ethereumProvider;
     if (!provider) {
       uiConsole("provider not initialized yet");
       return;
@@ -41,6 +44,7 @@ function App() {
   };
 
   const OnSignAndSendTransaction = async () => {
+    const provider = connection?.ethereumProvider;
     if (!provider) {
       uiConsole("provider not initialized yet");
       return;
@@ -111,9 +115,9 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
       <h1 className="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/no-modal" rel="noreferrer">
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth{" "}
         </a>
         & XRPL Example

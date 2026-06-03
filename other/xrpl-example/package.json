@@ -3,29 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@web3auth/modal": "^10.15.0",
+    "@web3auth/modal": "^11.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "xrpl": "^2.7.0"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
+    "typescript": "^5.7.3",
+    "vite": "^5.4.0",
     "buffer": "^6.0.3",
-    "process": "^0.11.10",
-    "typescript": "^5.5.4",
-    "vite": "^5.4.0"
+    "process": "^0.11.10"
   },
   "scripts": {
     "start": "vite",
+    "dev": "vite",
     "build": "tsc && vite build",
-    "serve": "vite preview"
-  }
+    "preview": "vite preview",
+    "lint": "eslint"
+  },
+  "type": "module"
 }

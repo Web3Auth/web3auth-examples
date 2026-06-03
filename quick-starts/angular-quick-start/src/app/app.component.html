@@ -1,39 +1,105 @@
-<div class="content">
+<div class="w3a-example container">
   <h1 class="title">
-    <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/modal">Web3Auth</a> & AngularJS
-    Example
+    <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/js/" rel="noreferrer">
+      Web3Auth
+    </a>
+    & Angular Modal Quick Start
   </h1>
-  <div class="setting">
-    <div
-      *ngIf="loggedIn; else elseBlock"
-      class="card-container"
-    >
-      <button class="card card-small" (click)="getUserInfo()">
-        Get User Info
-      </button>
-      <button class="card card-small" (click)="getAccounts()">
-        Get Accounts
-      </button>
-      <button class="card card-small" (click)="getBalance()">
-        Get Balance
-      </button>
-      <button class="card card-small" (click)="signMessage()">
-        Sign Message
-      </button>
-      <button class="card card-small" (click)="sendTransaction()">
-        Send Transaction
-      </button>
-      <button class="card card-small" (click)="logout()">Log Out</button>
-    </div>
-    <ng-template #elseBlock>
-      <div class="card-container">
-        <button class="card card-small" (click)="login()">Login</button>
-      </div>
-    </ng-template>
-    <div class="console" id="console-ui">
-      <p class="code">Logged In</p>
-    </div>
+
+  <!-- IMP START - Login -->
+  <div *ngIf="!loggedIn; else loggedInView" class="grid">
+    <button (click)="login()" class="card">Login</button>
+    <div *ngIf="connectLoading" class="loading">Connecting...</div>
+    <div *ngIf="connectError" class="error">{{ connectError }}</div>
   </div>
+  <!-- IMP END - Login -->
+
+  <ng-template #loggedInView>
+    <div class="grid">
+      <h2>Connected to {{ connectorName }}</h2>
+      <!-- IMP START - Blockchain Calls -->
+      <div>{{ address }}</div>
+      <!-- IMP END - Blockchain Calls -->
+      <div class="flex-container">
+        <div>
+          <button (click)="getUserInfo()" class="card">Get User Info</button>
+        </div>
+        <!-- IMP START - Logout -->
+        <div>
+          <button (click)="logout()" class="card">Log Out</button>
+          <div *ngIf="disconnectLoading" class="loading">Disconnecting...</div>
+          <div *ngIf="disconnectError" class="error">{{ disconnectError }}</div>
+        </div>
+        <!-- IMP END - Logout -->
+      </div>
+
+      <!-- IMP START - Blockchain Calls -->
+      <div>
+        <h2>Send Transaction</h2>
+        <form (submit)="onSendTransaction($event)">
+          <input name="address" placeholder="Address" required />
+          <input
+            name="value"
+            placeholder="Amount (ETH)"
+            type="number"
+            step="0.000000001"
+            required
+          />
+          <button [disabled]="sendPending" type="submit">
+            {{ sendPending ? "Confirming..." : "Send" }}
+          </button>
+        </form>
+        <div *ngIf="sendHash">Transaction Hash: {{ sendHash }}</div>
+        <div *ngIf="sendConfirming">Waiting for confirmation...</div>
+        <div *ngIf="sendConfirmed">Transaction confirmed.</div>
+        <div *ngIf="sendError" class="error">{{ sendError }}</div>
+      </div>
+
+      <div>
+        <h2>Balance</h2>
+        <div>
+          <span *ngIf="balanceDisplay">{{ balanceDisplay }}</span>
+          <span *ngIf="balanceLoading">Loading...</span>
+          <span *ngIf="balanceError" class="error">Error: {{ balanceError }}</span>
+        </div>
+      </div>
+
+      <div>
+        <h2>Sign Message</h2>
+        <form (submit)="onSignMessage($event)">
+          <input name="message" placeholder="Message" required />
+          <button [disabled]="signPending" type="submit">
+            {{ signPending ? "Signing..." : "Sign" }}
+          </button>
+        </form>
+        <div *ngIf="signature" class="signature">Signature: {{ signature }}</div>
+        <div *ngIf="signError" class="error">{{ signError }}</div>
+      </div>
+
+      <div>
+        <h2>Switch Chain</h2>
+        <h3>Connected to {{ chainId }}</h3>
+        <div class="flex-row">
+          <button
+            *ngFor="let chain of chains"
+            [disabled]="chainId === chain.chainId"
+            (click)="switchChain(chain)"
+            type="button"
+            class="card"
+          >
+            {{ chain.displayName }}
+          </button>
+        </div>
+        <div *ngIf="switchChainError" class="error">{{ switchChainError }}</div>
+      </div>
+      <!-- IMP END - Blockchain Calls -->
+    </div>
+  </ng-template>
+
+  <div id="console" style="white-space: pre-line">
+    <p style="white-space: pre-line"></p>
+  </div>
+
   <footer class="footer">
     <a
       href="https://github.com/Web3Auth/web3auth-examples/tree/main/quick-starts/angular-quick-start"

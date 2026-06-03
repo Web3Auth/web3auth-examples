@@ -1,19 +1,18 @@
-import type { IProvider } from "@web3auth/modal";
 import { getHttpEndpoint } from "@orbs-network/ton-access";
 import TonWeb from "tonweb";
 
-// Get the private key from the Web3Auth provider
-export async function getPrivateKey(provider: IProvider): Promise<string> {
-  try {
-    const privateKey = await provider.request({ method: "private_key" });
-    return privateKey as string;
-  } catch (error) {
-    console.error("Error getting private key:", error);
-    throw error;
+function getKeyPairFromPrivateKey(privateKey: string): { publicKey: Uint8Array; secretKey: Uint8Array } {
+  const privateKeyBytes = new Uint8Array(privateKey.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16)));
+
+  if (privateKeyBytes.length !== 32) {
+    const adjustedPrivateKey = new Uint8Array(32);
+    adjustedPrivateKey.set(privateKeyBytes.slice(0, 32));
+    return TonWeb.utils.nacl.sign.keyPair.fromSeed(adjustedPrivateKey);
   }
+
+  return TonWeb.utils.nacl.sign.keyPair.fromSeed(privateKeyBytes);
 }
 
-// Helper function to get TonWeb instance
 async function getTonWeb(): Promise<TonWeb> {
   const rpc = await getHttpEndpoint({
     network: "testnet",
@@ -22,27 +21,12 @@ async function getTonWeb(): Promise<TonWeb> {
   return new TonWeb(new TonWeb.HttpProvider(rpc));
 }
 
-// Get key pair from private key
-function getKeyPairFromPrivateKey(privateKey: string): { publicKey: Uint8Array; secretKey: Uint8Array } {
-  // Convert the hex string to a Uint8Array
-  const privateKeyBytes = new Uint8Array(privateKey.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16)));
-
-  // Ensure the private key is 32 bytes (256 bits)
-  if (privateKeyBytes.length !== 32) {
-    // If it's shorter, pad it. If it's longer, truncate it.
-    const adjustedPrivateKey = new Uint8Array(32);
-    adjustedPrivateKey.set(privateKeyBytes.slice(0, 32));
-    return TonWeb.utils.nacl.sign.keyPair.fromSeed(adjustedPrivateKey);
-  }
-
-  // If it's already 32 bytes, use it directly
-  return TonWeb.utils.nacl.sign.keyPair.fromSeed(privateKeyBytes);
+export function getChainId(): string {
+  return "testnet";
 }
 
-// Get account address
-export async function getAccounts(provider: IProvider): Promise<string> {
+export async function getAccounts(privateKey: string): Promise<string> {
   try {
-    const privateKey = await getPrivateKey(provider);
     const keyPair = getKeyPairFromPrivateKey(privateKey);
     const tonweb = await getTonWeb();
     
@@ -58,15 +42,9 @@ export async function getAccounts(provider: IProvider): Promise<string> {
   }
 }
 
-// Get chain ID
-export function getChainId(): string {
-  return "testnet"; 
-}
-
-// Get account balance
-export async function getBalance(provider: IProvider): Promise<string> {
+export async function getBalance(privateKey: string): Promise<string> {
   try {
-    const address = await getAccounts(provider);
+    const address = await getAccounts(privateKey);
     const tonweb = await getTonWeb();
     const balance = await tonweb.getBalance(address);
     return TonWeb.utils.fromNano(balance);
@@ -76,10 +54,8 @@ export async function getBalance(provider: IProvider): Promise<string> {
   }
 }
 
-// Sign a message
-export async function signMessage(provider: IProvider, message = "Hello, TON!"): Promise<string> {
+export async function signMessage(privateKey: string, message = "Hello, TON!"): Promise<string> {
   try {
-    const privateKey = await getPrivateKey(provider);
     const keyPair = getKeyPairFromPrivateKey(privateKey);
     
     const messageBytes = new TextEncoder().encode(message);
@@ -93,10 +69,8 @@ export async function signMessage(provider: IProvider, message = "Hello, TON!"):
   }
 }
 
-// Send a transaction
-export async function signAndSendTransaction(provider: IProvider): Promise<string> {
+export async function signAndSendTransaction(privateKey: string): Promise<string> {
   try {
-    const privateKey = await getPrivateKey(provider);
     const keyPair = getKeyPairFromPrivateKey(privateKey);
     const tonweb = await getTonWeb();
     

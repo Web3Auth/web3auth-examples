@@ -2,6 +2,7 @@ import {
   useSignAndSendTransaction,
   useSolanaWallet,
 } from "@web3auth/modal/react/solana";
+import { useWeb3Auth } from "@web3auth/modal/react";
 import {
   Connection,
   PublicKey,
@@ -32,7 +33,11 @@ interface DomainRecord {
 }
 
 export function SNS() {
-  const { accounts, connection } = useSolanaWallet();
+  const { accounts } = useSolanaWallet();
+  const { web3Auth } = useWeb3Auth();
+  // @bonfida/spl-name-service requires a web3.js Connection — narrow bridge until bonfida supports @solana/kit
+  const rpcTarget = web3Auth?.currentChain?.rpcTarget ?? "https://api.devnet.solana.com";
+  const connection = new Connection(rpcTarget);
   const [domainInput, setDomainInput] = useState<string>("");
   const [registrationInput, setRegistrationInput] = useState<string>("");
   const [resolvedAddress, setResolvedAddress] = useState<string | null>(null);
@@ -45,7 +50,7 @@ export function SNS() {
 
   // 1. Domain Registration
   const registerDomain = async () => {
-    if (!connection || !accounts) return;
+    if (!accounts) return;
 
     const publicKey = new PublicKey(accounts[0]);
 
@@ -84,7 +89,8 @@ export function SNS() {
         recentBlockhash: blockhash,
       }).add(...ixs);
 
-      const sig = await signAndSendTransaction(tx);
+      // Bridge: bonfida builds a web3.js Transaction; cast to any until bonfida supports @solana/kit
+      const sig = await signAndSendTransaction(tx as any);
 
       if (sig) {
         setSuccess(true);
@@ -102,7 +108,7 @@ export function SNS() {
 
   // 2. Domain Resolution
   const resolveDomain = async () => {
-    if (!connection || !domainInput.trim()) return;
+    if (!domainInput.trim()) return;
 
     try {
       setIsLoading(true);
@@ -119,7 +125,7 @@ export function SNS() {
 
   // 3. Primary Domain Lookup
   const fetchPrimaryDomain = async () => {
-    if (!connection || !accounts || accounts.length === 0) return;
+    if (!accounts || accounts.length === 0) return;
 
     try {
       setIsLoading(true);
@@ -139,7 +145,7 @@ export function SNS() {
 
   // 4. Domain Records
   const fetchDomainRecords = async () => {
-    if (!connection || !domainInput.trim()) return;
+    if (!domainInput.trim()) return;
 
     try {
       setIsLoading(true);
@@ -196,10 +202,10 @@ export function SNS() {
 
   // Auto-fetch primary domain when connected
   useEffect(() => {
-    if (connection && accounts && accounts.length > 0) {
+    if (accounts && accounts.length > 0) {
       fetchPrimaryDomain();
     }
-  }, [connection, accounts]);
+  }, [accounts, rpcTarget]);
 
   // Utils
 

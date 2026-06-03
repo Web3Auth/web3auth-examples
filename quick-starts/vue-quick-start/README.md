@@ -1,6 +1,6 @@
 # MetaMask Embedded Wallets — Vue Quick Start
 
-Vue 3 example using MetaMask Embedded Wallets (powered by Web3Auth) on EVM chains. Uses the `@web3auth/modal` Vue SDK with native composables and built-in Wagmi Vue integration — the only embedded wallet SDK with first-class Vue support.
+Vue 3 + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) on EVM chains. Uses the `@web3auth/modal` Vue SDK with native composables and built-in Wagmi Vue integration — the only embedded wallet SDK with first-class Vue support.
 
 ## Prerequisites
 
@@ -32,16 +32,16 @@ cp .env.example .env
 Edit `.env` and set your Client ID:
 
 ```
-VUE_APP_WEB3AUTH_CLIENT_ID=YOUR_CLIENT_ID
+VITE_WEB3AUTH_CLIENT_ID=YOUR_CLIENT_ID
 ```
 
 ### 4. Run the application
 
 ```bash
-npm run serve
+npm run dev
 ```
 
-Visit `http://localhost:8080` in your browser.
+Visit `http://localhost:5173` in your browser.
 
 > Use **Sapphire Devnet** (the default) for local development. Sapphire Mainnet does not allow localhost.
 

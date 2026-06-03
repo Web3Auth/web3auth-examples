@@ -1,21 +1,23 @@
 import "./App.css";
 import { useWeb3AuthConnect, useWeb3AuthDisconnect, useWeb3AuthUser } from "@web3auth/modal/react";
 // IMP START - Blockchain Calls  
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { SendTransaction } from "./components/sendTransaction";
 import { Balance } from "./components/getBalance";
 import { SwitchChain } from "./components/switchNetwork";
+import { SignMessage } from "./components/signMessage";
 // IMP END - Blockchain Calls
 function App() {
   // IMP START - Login  
-  const { connect, isConnected, connectorName, loading: connectLoading, error: connectError } = useWeb3AuthConnect();
+  const { connect, isConnected, connectorName, loading: connectLoading, error: connectError } =
+    useWeb3AuthConnect();
   // IMP END - Login
   // IMP START - Logout
   const { disconnect, loading: disconnectLoading, error: disconnectError } = useWeb3AuthDisconnect();
   // IMP END - Logout
   const { userInfo } = useWeb3AuthUser();
   // IMP START - Blockchain Calls
-  const { address } = useAccount();
+  const { address } = useConnection();
   // IMP END - Blockchain Calls
 
   function uiConsole(...args: any[]): void {
@@ -51,6 +53,7 @@ function App() {
       {/* IMP START - Blockchain Calls */}
       <SendTransaction />
       <Balance />
+      <SignMessage />
       <SwitchChain />
       {/* IMP END - Blockchain Calls */}
     </div>
@@ -70,9 +73,9 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
       <h1 className="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/modal" rel="noreferrer">
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth{" "}
         </a>
         & React Modal Quick Start

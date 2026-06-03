@@ -2,11 +2,12 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "update-web3auth": "lerna exec --concurrency 1 -- 'ncu -u @web3auth/* && npm install'",
-    "update-web3auth-alpha": "lerna exec --concurrency 1 -- 'ncu -u @web3auth/* --target @next'",
+    "update-web3auth": "lerna exec --concurrency 1 -- 'ncu -u @web3auth/* && npm ci'",
+    "update-web3auth-alpha": "lerna exec --concurrency 1 -- 'ncu -u @web3auth/* --target @next && npm install --legacy-peer-deps'",
     "install-all": "lerna exec --concurrency 1 -- 'npm install'",
     "build-all": "lerna exec --concurrency 1 -- 'npm run build'",
-    "set-client-id": "node set-client-id.js"
+    "set-client-id": "node set-client-id.js",
+    "test:v11": "node test-harness/run-all.mjs"
   },
   "devDependencies": {
     "lerna": "^6.4.1",

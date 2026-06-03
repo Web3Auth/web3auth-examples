@@ -1,34 +1,50 @@
 import { FormEvent } from "react";
 import { useSolanaWallet, useSignAndSendTransaction } from "@web3auth/modal/react/solana";
-import { LAMPORTS_PER_SOL, PublicKey, SystemProgram, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import {
+  address,
+  appendTransactionMessageInstruction,
+  compileTransaction,
+  createNoopSigner,
+  createTransactionMessage,
+  lamports,
+  pipe,
+  setTransactionMessageFeePayerSigner,
+  setTransactionMessageLifetimeUsingBlockhash,
+} from "@solana/kit";
+import { getTransferSolInstruction } from "@solana-program/system";
 
 export function SendVersionedTransaction() {
   const { data: hash, error, loading: isPending, signAndSendTransaction } = useSignAndSendTransaction();
-  const { accounts, connection } = useSolanaWallet();
+  const { accounts, rpc } = useSolanaWallet();
 
   async function submit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    const formData = new FormData(e.target as HTMLFormElement)
-    const to = formData.get('address') as string
-    const value = formData.get('value') as string
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const to = formData.get("address") as string;
+    const value = formData.get("value") as string;
 
-    const block = await connection!.getLatestBlockhash();
-    const TransactionInstruction = SystemProgram.transfer({
-      fromPubkey: new PublicKey(accounts![0]),
-      toPubkey: new PublicKey(to),
-      lamports: Number(value) * LAMPORTS_PER_SOL,
-    });
+    if (!rpc || !accounts) return;
 
-    const transactionMessage = new TransactionMessage({
-      recentBlockhash: block.blockhash,
-      instructions: [TransactionInstruction],
-      payerKey: new PublicKey(accounts![0]),
-    });
+    const { value: latestBlockhash } = await rpc.getLatestBlockhash().send();
 
-    const transaction = new VersionedTransaction(transactionMessage.compileToV0Message());
-    signAndSendTransaction(transaction);
+    const feePayer = createNoopSigner(address(accounts[0]));
+    const message = pipe(
+      createTransactionMessage({ version: 0 }),
+      (m) => setTransactionMessageFeePayerSigner(feePayer, m),
+      (m) => setTransactionMessageLifetimeUsingBlockhash(latestBlockhash, m),
+      (m) =>
+        appendTransactionMessageInstruction(
+          getTransferSolInstruction({
+            source: feePayer,
+            destination: address(to),
+            amount: lamports(BigInt(Math.floor(Number(value) * 1e9))),
+          }),
+          m,
+        ),
+    );
+
+    signAndSendTransaction(compileTransaction(message));
   }
-
 
   return (
     <div>
@@ -43,13 +59,11 @@ export function SendVersionedTransaction() {
           required
         />
         <button disabled={isPending} type="submit">
-          {isPending ? 'Confirming...' : 'Send'}
+          {isPending ? "Confirming..." : "Send"}
         </button>
       </form>
       {hash && <div>Transaction Hash: {hash}</div>}
-      {error && (
-        <div>Error: {error.message}</div>
-      )}
+      {error && <div>Error: {error.message}</div>}
     </div>
-  )
+  );
 }

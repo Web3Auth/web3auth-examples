@@ -1,3 +1,4 @@
+/* Scoped to .w3a-example to avoid affecting Web3Auth modal UI */
 /* Modern, mobile-first CSS with improved form elements */
 :root {
 	/* Web3Auth Docs Inspired Colors (Light Mode) */
@@ -33,31 +34,31 @@
 	}
 
 	/* Keep input background consistent with --bg-light */
-	input, select, textarea {
+	.w3a-example input, .w3a-example select, .w3a-example textarea {
 		background-color: var(--bg-light);
 		border-color: var(--border-color);
 		color: var(--text-color);
 	}
 
-	input:focus, select:focus, textarea:focus {
+	.w3a-example input:focus, .w3a-example select:focus, .w3a-example textarea:focus {
 		border-color: var(--primary-color);
 		box-shadow: 0 0 0 3px rgba(64, 144, 255, 0.3);
 	}
 
 	/* Keep button background consistent with --bg-light or slightly darker */
-	button, .card {
+	.w3a-example button, .w3a-example .card {
 		background-color: var(--bg-light);
 		border-color: var(--border-color);
 		color: var(--text-color);
 	}
 
-	button:hover, .card:hover {
+	.w3a-example button:hover, .w3a-example .card:hover {
 		background-color: var(--bg-hover);
 		border-color: var(--text-muted);
 	}
 }
 
-* {
+.w3a-example * {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
@@ -94,7 +95,7 @@ body {
 	font-weight: 600;
 }
 
-.title a {
+.w3a-example .title a {
 	color: var(--primary-color);
 	text-decoration: none;
 }
@@ -113,7 +114,7 @@ h3 {
 }
 
 /* Buttons */
-button, .card {
+.w3a-example button, .w3a-example .card {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -129,25 +130,25 @@ button, .card {
 	box-shadow: var(--shadow-sm);
 }
 
-button:hover, .card:hover {
+.w3a-example button:hover, .w3a-example .card:hover {
 	background-color: var(--bg-hover);
 	box-shadow: var(--shadow-md);
 	transform: translateY(-1px);
 }
 
-.card {
+.w3a-example .card {
 	width: 100%;
 	margin: 8px 0;
 	text-align: center;
 }
 
-button[disabled] {
+.w3a-example button[disabled] {
 	opacity: 0.6;
 	cursor: not-allowed;
 }
 
 /* Form elements */
-form {
+.w3a-example form {
 	width: 100%;
 	display: flex;
 	flex-direction: row;
@@ -156,7 +157,7 @@ form {
 	margin: 16px 0;
 }
 
-input, select, textarea {
+.w3a-example input, .w3a-example select, .w3a-example textarea {
 	width: 100%;
 	padding: 12px 16px;
 	border: 1px solid var(--border-color);
@@ -168,13 +169,13 @@ input, select, textarea {
 	transition: border-color 0.2s ease;
 }
 
-input:focus, select:focus, textarea:focus {
+.w3a-example input:focus, .w3a-example select:focus, .w3a-example textarea:focus {
 	outline: none;
 	border-color: var(--primary-color);
 	box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
 }
 
-input::placeholder {
+.w3a-example input::placeholder {
 	color: var(--text-muted);
 }
 
@@ -257,12 +258,12 @@ input::placeholder {
 		font-size: 32px;
 	}
 	
-	form {
+	.w3a-example form {
 		flex-direction: row;
 		align-items: flex-start;
 	}
 	
-	form button {
+	.w3a-example form button {
 		margin-top: 0;
 	}
 }

@@ -1,12 +1,27 @@
 # MetaMask Embedded Wallets — React Solana Quick Start
 
-React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) on the **Solana** blockchain. Uses the `@web3auth/modal` React SDK with the built-in Solana provider hooks for signing transactions and fetching balances.
+React + Vite boilerplate for **MetaMask Embedded Wallets (Web3Auth)** + **[Solana Kit](https://www.solanakit.com/docs/getting-started)**.
+
+## What each SDK does
+
+| Feature | Web3Auth (`@web3auth/modal/react/solana`) | Solana Kit (`src/solana/`) |
+|--------|-------------------------------------------|----------------------------|
+| Login / logout | `useWeb3AuthConnect`, `useWeb3AuthDisconnect` | — |
+| Wallet address | `useSolanaWallet` → `accounts` | — |
+| Read chain / RPC | `useWeb3Auth` → `currentChain.rpcTarget` | `createSolanaRpc` for balance & blockhash |
+| Sign message | `useSignMessage` | — |
+| Sign transaction | `useSignTransaction` | `buildSolTransferTransaction` |
+| Send transaction | `useSignAndSendTransaction` | `buildSolTransferTransaction` |
+| Switch chain | `useSwitchChain` + `useWeb3Auth` | — |
+| Solana React context | `SolanaProvider` (wraps app) | — |
+
+Kit is only used to **build** transfer transactions and format lamports. Signing and RPC endpoints are handled by Web3Auth.
 
 ## Prerequisites
 
 - Node.js 20+
 - npm
-- A Client ID from the [Dashboard](https://dashboard.web3auth.io) — configure it with the Solana chain
+- A Client ID from the [Dashboard](https://dashboard.web3auth.io) — add Solana chain(s) under **Chains & Networks** (RPC URLs come from the dashboard; this app does not hardcode them)
 
 ## Setup
 
@@ -45,13 +60,24 @@ Visit `http://localhost:5173` in your browser.
 
 > Use **Sapphire Devnet** (the default) for local development. Sapphire Mainnet does not allow localhost.
 
+## Project layout
+
+```
+src/
+  solana/transfer.ts   # Kit: build a SOL transfer transaction
+  components/          # Web3Auth Solana hooks (one component per action)
+  web3authContext.tsx
+  main.tsx             # Web3AuthProvider + SolanaProvider
+```
+
 ## Resources
 
-- [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Dashboard — Chains and Networks](https://docs.metamask.io/embedded-wallets/dashboard/chains-and-networks/)
+- [Solana Kit — Getting started](https://www.solanakit.com/docs/getting-started)
+- [Solana Kit — Sending transactions](https://www.solanakit.com/docs/guides/sending-transactions)
+- [MetaMask Embedded Wallets — Solana](https://docs.metamask.io/embedded-wallets/connect-blockchain/solana/)
 - [React SDK](https://docs.metamask.io/embedded-wallets/sdk/react/)
-- [Solana Integration](https://docs.metamask.io/embedded-wallets/connect-blockchain/solana/)
 - [Dashboard](https://dashboard.web3auth.io)
-- [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)
 
 ## License
 

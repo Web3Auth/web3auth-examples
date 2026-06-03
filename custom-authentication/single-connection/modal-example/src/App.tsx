@@ -1,9 +1,10 @@
 import "./App.css";
 import { useWeb3AuthConnect, useWeb3AuthDisconnect, useWeb3AuthUser } from "@web3auth/modal/react";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { SendTransaction } from "./components/sendTransaction";
 import { Balance } from "./components/getBalance";
 import { SwitchChain } from "./components/switchNetwork";
+import { SignMessage } from "./components/signMessage";
 function App() {
   // IMP START - Login  
   const { connect, isConnected, connectorName, loading: connectLoading, error: connectError } = useWeb3AuthConnect();
@@ -12,7 +13,7 @@ function App() {
   const { disconnect, loading: disconnectLoading, error: disconnectError } = useWeb3AuthDisconnect();
   // IMP END - Logout
   const { userInfo } = useWeb3AuthUser();
-  const { address } = useAccount();
+  const { address } = useConnection();
 
   function uiConsole(...args: any[]): void {
     const el = document.querySelector("#console>p");
@@ -45,6 +46,7 @@ function App() {
       <SendTransaction />
       <Balance />
       <SwitchChain />
+      <SignMessage />
     </div>
   );
 
@@ -62,12 +64,12 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
       <h1 className="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/modal" rel="noreferrer">
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth{" "}
         </a>
-        & React Modal Quick Start
+        & React Modal Custom Authentication
       </h1>
 
       {isConnected ? loggedInView : unloggedInView}
@@ -77,7 +79,7 @@ function App() {
 
       <footer className="footer">
         <a
-          href="https://github.com/Web3Auth/web3auth-examples/tree/main/quick-starts/react-quick-start"
+          href="https://github.com/Web3Auth/web3auth-examples/tree/main/custom-authentication/single-connection/modal-example"
           target="_blank"
           rel="noopener noreferrer"
         >
