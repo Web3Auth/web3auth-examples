@@ -1,55 +1,52 @@
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
+import { useWeb3Auth } from "@web3auth/modal/react";
 import { useSolanaWallet, useSignAndSendTransaction } from "@web3auth/modal/react/solana";
-import { LAMPORTS_PER_SOL, PublicKey, SystemProgram, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 
+import { buildSolTransferTransaction } from "../solana/transfer";
+
+// Build a SOL transfer with Solana Kit, then sign AND broadcast it with the
+// embedded wallet. `signature` is the base58 transaction signature.
 export function SendVersionedTransaction() {
-  const { data: hash, error, loading: isPending, signAndSendTransaction } = useSignAndSendTransaction();
-  const { accounts, connection } = useSolanaWallet();
+  const { web3Auth } = useWeb3Auth();
+  const { accounts } = useSolanaWallet();
+  const { data: signature, error, loading: isPending, signAndSendTransaction } = useSignAndSendTransaction();
+  const [formError, setFormError] = useState<string | null>(null);
 
   async function submit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    const formData = new FormData(e.target as HTMLFormElement)
-    const to = formData.get('address') as string
-    const value = formData.get('value') as string
+    e.preventDefault();
+    setFormError(null);
 
-    const block = await connection!.getLatestBlockhash();
-    const TransactionInstruction = SystemProgram.transfer({
-      fromPubkey: new PublicKey(accounts![0]),
-      toPubkey: new PublicKey(to),
-      lamports: Number(value) * LAMPORTS_PER_SOL,
-    });
+    const rpcTarget = web3Auth?.currentChain?.rpcTarget;
+    if (!rpcTarget || !accounts?.length) return;
 
-    const transactionMessage = new TransactionMessage({
-      recentBlockhash: block.blockhash,
-      instructions: [TransactionInstruction],
-      payerKey: new PublicKey(accounts![0]),
-    });
+    const form = new FormData(e.currentTarget);
+    const to = form.get("address")?.toString().trim() ?? "";
+    const amountSol = Number(form.get("value"));
+    if (!to || !Number.isFinite(amountSol) || amountSol <= 0) {
+      setFormError("Enter a valid recipient address and a positive amount.");
+      return;
+    }
 
-    const transaction = new VersionedTransaction(transactionMessage.compileToV0Message());
-    signAndSendTransaction(transaction);
+    try {
+      const transaction = await buildSolTransferTransaction(rpcTarget, accounts[0], to, amountSol);
+      await signAndSendTransaction(transaction);
+    } catch (err) {
+      setFormError(err instanceof Error ? err.message : "Failed to send transaction.");
+    }
   }
-
 
   return (
     <div>
-      <h2>Send Versioned Transaction</h2>
+      <h2>Send Transaction</h2>
       <form onSubmit={submit}>
-        <input name="address" placeholder="Address" required />
-        <input
-          name="value"
-          placeholder="Amount (SOL)"
-          type="number"
-          step="0.01"
-          required
-        />
+        <input name="address" placeholder="Recipient address" required />
+        <input name="value" placeholder="Amount (SOL)" type="number" step="0.01" min="0" required />
         <button disabled={isPending} type="submit">
-          {isPending ? 'Confirming...' : 'Send'}
+          {isPending ? "Sending..." : "Send"}
         </button>
       </form>
-      {hash && <div>Transaction Hash: {hash}</div>}
-      {error && (
-        <div>Error: {error.message}</div>
-      )}
+      {signature && <div className="hash">Transaction signature: {signature}</div>}
+      {(formError ?? error?.message) && <div className="error">Error: {formError ?? error?.message}</div>}
     </div>
-  )
+  );
 }

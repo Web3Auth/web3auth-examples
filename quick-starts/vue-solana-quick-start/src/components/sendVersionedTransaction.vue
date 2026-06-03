@@ -1,59 +1,52 @@
 <script setup lang="ts">
-import { LAMPORTS_PER_SOL, PublicKey, SystemProgram, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import { ref } from "vue";
+import { useWeb3Auth } from "@web3auth/modal/vue";
 import { useSolanaWallet, useSignAndSendTransaction } from "@web3auth/modal/vue/solana";
 
-const { data: hash, error, loading: isPending, signAndSendTransaction } = useSignAndSendTransaction();
-const { accounts, connection } = useSolanaWallet();
+import { buildSolTransferTransaction } from "../solana/transfer";
+
+// Build a SOL transfer with Solana Kit, then sign AND broadcast it with the
+// embedded wallet. `signature` is the base58 transaction signature.
+const { web3Auth } = useWeb3Auth();
+const { accounts } = useSolanaWallet();
+const { data: signature, error, loading: isPending, signAndSendTransaction } = useSignAndSendTransaction();
+const formError = ref<string | null>(null);
 
 async function submit(event: Event) {
   event.preventDefault();
-  const formData = new FormData(event.target as HTMLFormElement);
-  const to = formData.get('address') as string;
-  const value = formData.get('value') as string;
+  formError.value = null;
 
-  const connectionValue = connection.value;
-  const accountsValue = accounts.value;
-  
-  if (!connectionValue || !accountsValue || accountsValue.length === 0) {
-    console.error("Connection or accounts not available");
+  const rpcTarget = web3Auth.value?.currentChain?.rpcTarget;
+  if (!rpcTarget || !accounts.value?.length) return;
+
+  const form = new FormData(event.target as HTMLFormElement);
+  const to = form.get("address")?.toString().trim() ?? "";
+  const amountSol = Number(form.get("value"));
+  if (!to || !Number.isFinite(amountSol) || amountSol <= 0) {
+    formError.value = "Enter a valid recipient address and a positive amount.";
     return;
   }
 
-  const block = await connectionValue.getLatestBlockhash();
-  const TransactionInstruction = SystemProgram.transfer({
-    fromPubkey: new PublicKey(accountsValue[0]),
-    toPubkey: new PublicKey(to),
-    lamports: Number(value) * LAMPORTS_PER_SOL,
-  });
-
-  const transactionMessage = new TransactionMessage({
-    recentBlockhash: block.blockhash,
-    instructions: [TransactionInstruction],
-    payerKey: new PublicKey(accountsValue[0]),
-  });
-
-  const transaction = new VersionedTransaction(transactionMessage.compileToV0Message());
-  signAndSendTransaction(transaction);
+  try {
+    const transaction = await buildSolTransferTransaction(rpcTarget, accounts.value[0], to, amountSol);
+    await signAndSendTransaction(transaction);
+  } catch (err) {
+    formError.value = err instanceof Error ? err.message : "Failed to send transaction.";
+  }
 }
 </script>
 
 <template>
   <div>
-    <h2>Send Versioned Transaction</h2>
+    <h2>Send Transaction</h2>
     <form @submit.prevent="submit">
-      <input name="address" placeholder="Address" required />
-      <input
-        name="value"
-        placeholder="Amount (SOL)"
-        type="number"
-        step="0.01"
-        required
-      />
-      <button :disabled="isPending" type="submit">
-        {{ isPending ? 'Confirming...' : 'Send' }}
+      <input name="address" placeholder="Recipient address" required />
+      <input name="value" placeholder="Amount (SOL)" type="number" step="0.01" min="0" required />
+      <button type="submit" :disabled="isPending">
+        {{ isPending ? "Sending..." : "Send" }}
       </button>
     </form>
-    <div v-if="hash">Transaction Hash: {{ hash }}</div>
-    <div v-if="error">Error: {{ error.message }}</div>
+    <div v-if="signature" class="hash">Transaction signature: {{ signature }}</div>
+    <div v-if="formError ?? error?.message" class="error">Error: {{ formError ?? error?.message }}</div>
   </div>
 </template>
