@@ -77,6 +77,7 @@ src/
 - [Solana Kit — Sending transactions](https://www.solanakit.com/docs/guides/sending-transactions)
 
 - [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Build with AI](https://docs.metamask.io/embedded-wallets/build-with-ai/) — set up the MCP server and skill for AI-assisted integration
 - [Vue SDK](https://docs.metamask.io/embedded-wallets/sdk/vue/)
 - [Solana Integration](https://docs.metamask.io/embedded-wallets/connect-blockchain/solana/)
 - [Dashboard](https://dashboard.web3auth.io)

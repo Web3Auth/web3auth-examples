@@ -1,6 +1,6 @@
 # MetaMask Embedded Wallets — Auth0 + Google Grouped Connection (Implicit)
 
-React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) with a **grouped connection** that combines Auth0 and Google OAuth (both via the implicit flow). A grouped connection ensures the same user always gets the **same wallet address** regardless of which provider they use to sign in.
+React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) with a **grouped connection** that combines Auth0, Google OAuth, and Auth0 GitHub (all via the implicit flow). A grouped connection ensures the same user always gets the **same wallet address** regardless of which provider they use to sign in.
 
 > Without grouping, signing in with Google and signing in with Auth0 would produce two completely different wallet addresses for the same person.
 
@@ -50,6 +50,7 @@ Visit `http://localhost:5173` in your browser.
 ## Resources
 
 - [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Build with AI](https://docs.metamask.io/embedded-wallets/build-with-ai/) — set up the MCP server and skill for AI-assisted integration
 - [Grouped Connections Guide](https://docs.metamask.io/embedded-wallets/authentication/group-connections/)
 - [Auth0 Integration Guide](https://docs.metamask.io/embedded-wallets/authentication/custom-connections/auth0/)
 - [Dashboard](https://dashboard.web3auth.io)

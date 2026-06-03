@@ -1,13 +1,12 @@
 # MetaMask Embedded Wallets — StarkNet
 
-React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) on **StarkNet** (Ethereum L2). After social login, the app derives an ed25519 key and uses the StarkNet provider to deploy a wallet, sign transactions, and interact with Cairo contracts.
+React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) on **StarkNet** (Ethereum L2). After social login, the app grinds Web3Auth's secp256k1 key to a Stark-curve key and uses the StarkNet provider to deploy a wallet, sign transactions, and interact with Cairo contracts.
 
 ## Prerequisites
 
 - Node.js 20+
 - npm
 - A Client ID from the [Dashboard](https://dashboard.web3auth.io)
-- StarkNet JSON-RPC endpoints (Mainnet and/or Sepolia) — a public Sepolia endpoint is pre-filled in `.env.example`
 
 ## Setup
 
@@ -35,9 +34,9 @@ Edit `.env`:
 ```
 VITE_WEB3AUTH_CLIENT_ID=YOUR_CLIENT_ID
 VITE_WEB3AUTH_CLIENT_ID_DEV=YOUR_DEVNET_CLIENT_ID
-VITE_STARKNET_JSON_RPC_URL_MAINNET=YOUR_MAINNET_RPC_URL
-VITE_STARKNET_JSON_RPC_URL_SEPOLIA=https://starknet-sepolia.public.blastapi.io/rpc/v0_8
 ```
+
+> During local development, the app uses a hardcoded Devnet Client ID in `web3authContext.tsx`. For production builds, set `VITE_WEB3AUTH_CLIENT_ID`. StarkNet RPC URLs are configured in `App.tsx`, not via environment variables.
 
 ### 4. Run the application
 
@@ -50,6 +49,7 @@ Visit `http://localhost:5173` in your browser.
 ## Resources
 
 - [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Build with AI](https://docs.metamask.io/embedded-wallets/build-with-ai/) — set up the MCP server and skill for AI-assisted integration
 - [Dashboard](https://dashboard.web3auth.io)
 - [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)
 

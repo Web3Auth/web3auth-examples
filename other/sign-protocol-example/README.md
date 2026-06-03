@@ -1,6 +1,6 @@
 # MetaMask Embedded Wallets — Sign Protocol
 
-React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) to create and verify **on-chain attestations via Sign Protocol**. Users authenticate with social login and use their derived wallet to sign attestations on-chain.
+React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) to create and verify **on-chain attestations via Sign Protocol on EVM (Sepolia)**. Users authenticate with social login and use their derived wallet with `@ethsign/sp-sdk` and Wagmi/viem to sign attestations on-chain.
 
 ## Prerequisites
 
@@ -46,6 +46,7 @@ Visit `http://localhost:5173` in your browser.
 ## Resources
 
 - [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Build with AI](https://docs.metamask.io/embedded-wallets/build-with-ai/) — set up the MCP server and skill for AI-assisted integration
 - [Dashboard](https://dashboard.web3auth.io)
 - [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)
 

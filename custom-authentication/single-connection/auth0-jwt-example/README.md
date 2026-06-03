@@ -7,8 +7,7 @@ React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) with 
 - Node.js 20+
 - npm
 - A Client ID from the [Dashboard](https://dashboard.web3auth.io)
-- An Auth0 application with your domain — get it from the [Auth0 Dashboard](https://manage.auth0.com/)
-- A custom Auth0 connection configured on the Dashboard ([Auth0 guide](https://docs.metamask.io/embedded-wallets/authentication/custom-connections/auth0/))
+- An Auth0 application with your domain and a custom Auth0 connection configured on the Dashboard ([Auth0 guide](https://docs.metamask.io/embedded-wallets/authentication/custom-connections/auth0/))
 
 ## Setup
 
@@ -36,6 +35,7 @@ Edit `.env`:
 ```
 VITE_WEB3AUTH_CLIENT_ID=YOUR_CLIENT_ID
 VITE_AUTH0_DOMAIN=YOUR_AUTH0_DOMAIN
+VITE_AUTH0_CLIENT_ID=YOUR_AUTH0_CLIENT_ID
 ```
 
 ### 4. Run the application
@@ -49,6 +49,7 @@ Visit `http://localhost:5173` in your browser.
 ## Resources
 
 - [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Build with AI](https://docs.metamask.io/embedded-wallets/build-with-ai/) — set up the MCP server and skill for AI-assisted integration
 - [Auth0 Integration Guide](https://docs.metamask.io/embedded-wallets/authentication/custom-connections/auth0/)
 - [Dashboard](https://dashboard.web3auth.io)
 - [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)

@@ -35,6 +35,8 @@ Edit `.env`:
 VITE_WEB3AUTH_CLIENT_ID=YOUR_CLIENT_ID
 ```
 
+Optional — the app reads `process.env.REACT_APP_XMTP_ENV` for the XMTP network (defaults to `production` if unset). In a Vite project, `.env` variables require a `VITE_` prefix to be exposed; this example relies on the default unless you configure env passthrough.
+
 ### 4. Run the application
 
 ```bash
@@ -46,6 +48,7 @@ Visit `http://localhost:5173` in your browser.
 ## Resources
 
 - [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Build with AI](https://docs.metamask.io/embedded-wallets/build-with-ai/) — set up the MCP server and skill for AI-assisted integration
 - [Dashboard](https://dashboard.web3auth.io)
 - [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)
 

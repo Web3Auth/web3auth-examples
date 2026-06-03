@@ -27,7 +27,19 @@ cd web3auth-examples/custom-authentication/single-connection/custom-jwt-example
 npm install
 ```
 
-### 3. Configure environment variables
+### 3. Start the JWT issuer (required)
+
+In a separate terminal, start the demo JWT server:
+
+```bash
+cd server
+npm install
+npm start
+```
+
+The server runs at `http://localhost:8080` by default and exposes `/api/token`.
+
+### 4. Configure environment variables
 
 ```bash
 cp .env.example .env
@@ -39,7 +51,13 @@ Edit `.env`:
 VITE_WEB3AUTH_CLIENT_ID=YOUR_CLIENT_ID
 ```
 
-### 4. Run the application
+Optional — override the JWT server URL (defaults to `http://localhost:8080`):
+
+```
+VITE_JWT_SERVER_URL=http://localhost:8080
+```
+
+### 5. Run the application
 
 ```bash
 npm run dev
@@ -50,6 +68,7 @@ Visit `http://localhost:5173` in your browser.
 ## Resources
 
 - [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Build with AI](https://docs.metamask.io/embedded-wallets/build-with-ai/) — set up the MCP server and skill for AI-assisted integration
 - [Custom JWT Guide](https://docs.metamask.io/embedded-wallets/authentication/custom-connections/custom-jwt/)
 - [Dashboard](https://dashboard.web3auth.io)
 - [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)

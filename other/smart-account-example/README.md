@@ -1,6 +1,6 @@
 # MetaMask Embedded Wallets — Smart Account (Account Abstraction)
 
-React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) as the **signer for an ERC-4337 smart account**. The Web3Auth wallet acts as the owner key for a smart contract account (e.g. Safe), enabling gasless transactions, batched calls, and paymasters.
+React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) as the **signer for EVM transactions via Wagmi**. After social login, the app sends transactions using the Web3Auth-derived wallet through standard Wagmi hooks.
 
 ## Prerequisites
 
@@ -46,6 +46,7 @@ Visit `http://localhost:5173` in your browser.
 ## Resources
 
 - [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Build with AI](https://docs.metamask.io/embedded-wallets/build-with-ai/) — set up the MCP server and skill for AI-assisted integration
 - [Smart Accounts](https://docs.metamask.io/embedded-wallets/features/smart-accounts/)
 - [Dashboard](https://dashboard.web3auth.io)
 - [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)

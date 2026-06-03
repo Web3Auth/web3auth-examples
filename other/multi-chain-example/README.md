@@ -1,6 +1,6 @@
 # MetaMask Embedded Wallets — Multi-Chain
 
-React + Vite example demonstrating how to use MetaMask Embedded Wallets (powered by Web3Auth) **across multiple blockchain networks in a single application**. Shows how to switch between EVM chains and other networks (Solana, etc.) using the same authenticated session.
+React + Vite example demonstrating how to use MetaMask Embedded Wallets (powered by Web3Auth) **across multiple blockchain networks in a single application**. Shows how to operate **Ethereum, Solana, Tezos, and Polkadot** from the same authenticated session.
 
 ## Prerequisites
 
@@ -46,6 +46,7 @@ Visit `http://localhost:5173` in your browser.
 ## Resources
 
 - [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Build with AI](https://docs.metamask.io/embedded-wallets/build-with-ai/) — set up the MCP server and skill for AI-assisted integration
 - [Chains and Networks](https://docs.metamask.io/embedded-wallets/dashboard/chains-and-networks/)
 - [Dashboard](https://dashboard.web3auth.io)
 - [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)

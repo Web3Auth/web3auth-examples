@@ -1,6 +1,6 @@
 # MetaMask Embedded Wallets — XRP Ledger (XRPL)
 
-React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) on the **XRP Ledger (XRPL)**. After social login, the app exports the private key and uses the xrpl.js library to sign transactions and submit them to the XRP Ledger.
+React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) on the **XRP Ledger (XRPL)**. After social login, the app uses Web3Auth provider RPC methods (`xrpl_getAccounts`, etc.) to sign transactions and submit them to the XRP Ledger.
 
 ## Prerequisites
 
@@ -46,6 +46,7 @@ Visit `http://localhost:5173` in your browser.
 ## Resources
 
 - [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Build with AI](https://docs.metamask.io/embedded-wallets/build-with-ai/) — set up the MCP server and skill for AI-assisted integration
 - [Dashboard](https://dashboard.web3auth.io)
 - [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)
 

@@ -23,9 +23,17 @@ cd web3auth-examples/quick-starts/vanillajs-quick-start
 npm install
 ```
 
-### 3. Set your Client ID
+### 3. Configure environment variables
 
-Open `src/main.js` and replace the placeholder `clientId` value with your own Client ID from the [Dashboard](https://dashboard.web3auth.io).
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and set your Client ID:
+
+```
+VITE_WEB3AUTH_CLIENT_ID=YOUR_CLIENT_ID
+```
 
 ### 4. Run the application
 
@@ -40,6 +48,7 @@ Visit `http://localhost:5173` in your browser.
 ## Resources
 
 - [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Build with AI](https://docs.metamask.io/embedded-wallets/build-with-ai/) — set up the MCP server and skill for AI-assisted integration
 - [JavaScript SDK](https://docs.metamask.io/embedded-wallets/sdk/js/)
 - [Dashboard](https://dashboard.web3auth.io)
 - [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)

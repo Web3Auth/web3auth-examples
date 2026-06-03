@@ -72,6 +72,7 @@ src/
 
 ## Resources
 
+- [Build with AI](https://docs.metamask.io/embedded-wallets/build-with-ai/) — set up the MCP server and skill for AI-assisted integration
 - [Dashboard — Chains and Networks](https://docs.metamask.io/embedded-wallets/dashboard/chains-and-networks/)
 - [Solana Kit — Getting started](https://www.solanakit.com/docs/getting-started)
 - [Solana Kit — Sending transactions](https://www.solanakit.com/docs/guides/sending-transactions)

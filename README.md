@@ -43,12 +43,6 @@ The fastest way to get a working integration for your framework.
 
 ---
 
-### React Playground
-
-A full-featured [React Playground](react-playground) that showcases multiple login methods, chain switching, signing, user info, and more — the most complete single demo in this repo.
-
----
-
 ### Custom Authentication — Single Connection
 
 Each example wires one external identity provider to a dedicated Web3Auth connection. Set up your connection on the [Dashboard](https://dashboard.web3auth.io) before running.
@@ -91,7 +85,7 @@ Grouped connections let multiple login methods resolve to the **same wallet addr
 | [aptos-example](other/aptos-example) | Interact with the Aptos Move blockchain | — |
 | [bitcoin-example](other/bitcoin-example) | Sign Bitcoin transactions | — |
 | [cosmos-example](other/cosmos-example) | Interact with Cosmos SDK chains | — |
-| [multi-chain-example](other/multi-chain-example) | Switch between multiple blockchains in one app | — |
+| [multi-chain-example](other/multi-chain-example) | Operate Ethereum, Solana, Tezos, and Polkadot in one session | — |
 | [polkadot-example](other/polkadot-example) | Sign transactions on Polkadot/Substrate | — |
 | [polymesh-example](other/polymesh-example) | Interact with the Polymesh security token network | — |
 | [starknet-example](other/starknet-example) | Interact with StarkNet (Ethereum L2) | — |
@@ -100,18 +94,50 @@ Grouped connections let multiple login methods resolve to the **same wallet addr
 | [ton-example](other/ton-example) | Interact with TON (Telegram Open Network) | — |
 | [tron-example](other/tron-example) | Sign transactions on TRON | — |
 | [xrpl-example](other/xrpl-example) | Interact with the XRP Ledger | — |
-| [smart-account-example](other/smart-account-example) | Account Abstraction (ERC-4337) with Web3Auth as the signer | [Smart Accounts](https://docs.metamask.io/embedded-wallets/features/smart-accounts/) |
+| [smart-account-example](other/smart-account-example) | Send EVM transactions via Wagmi with Web3Auth as the signer | [Smart Accounts](https://docs.metamask.io/embedded-wallets/features/smart-accounts/) |
 | [server-side-verification-example](other/server-side-verification-example) | Verify a Web3Auth `id_token` on your Next.js backend | [Server-Side Verification](https://docs.metamask.io/embedded-wallets/features/server-side-verification/) |
 | [solana-pay-example](other/solana-pay-example) | Solana Pay QR-code payment requests with Web3Auth | [Solana](https://docs.metamask.io/embedded-wallets/connect-blockchain/solana/) |
 | [sns-example](other/sns-example) | Solana Name Service (SNS) resolution | [Solana](https://docs.metamask.io/embedded-wallets/connect-blockchain/solana/) |
-| [sign-protocol-example](other/sign-protocol-example) | On-chain attestation signing via Sign Protocol | — |
+| [sign-protocol-example](other/sign-protocol-example) | On-chain attestations on Sepolia via Sign Protocol | — |
 | [xmtp-example](other/xmtp-example) | Decentralised messaging with XMTP | — |
+
+---
+
+## Build with AI
+
+Speed up integrations by giving your AI coding assistant access to the documentation and SDK reference.
+
+**Skill** (guides SDK selection, auth concepts, and common pitfalls):
+
+```bash
+npx skills add web3auth/skill
+```
+
+**MCP server** (live docs, examples, and SDK types). Add to Cursor or Claude Code:
+
+```json
+{
+  "mcpServers": {
+    "web3auth": {
+      "url": "https://mcp.web3auth.io"
+    }
+  }
+}
+```
+
+**Static docs** (for tools without MCP support):
+
+- Full snapshot: `https://docs.metamask.io/llms-embedded-wallets-full.txt`
+- Index: `https://docs.metamask.io/llms-embedded-wallets.txt`
+
+See the full [Build with AI](https://docs.metamask.io/embedded-wallets/build-with-ai/) guide for per-agent setup.
 
 ---
 
 ## Resources
 
 - [MetaMask Embedded Wallets Documentation](https://docs.metamask.io/embedded-wallets/)
+- [Build with AI](https://docs.metamask.io/embedded-wallets/build-with-ai/)
 - [Dashboard](https://dashboard.web3auth.io)
 - [Community — Builder Hub](https://builder.metamask.io/c/embedded-wallets/5)
 
