@@ -16,27 +16,92 @@
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <div class="content">
+    <div class="w3a-example container">
       <h1 class="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/modal">Web3Auth</a> & VanillaJS
-        Example
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/js/" rel="noreferrer">
+          Web3Auth
+        </a>
+        & VanillaJS Modal Quick Start
       </h1>
-      <div class="setting">
-        <div id="logged-in-view" class="card-container" style="display: none;">
-          <button class="card card-small" id="get-user-info-btn">Get User Info</button>
-          <button class="card card-small" id="get-accounts-btn">Get Accounts</button>
-          <button class="card card-small" id="get-balance-btn">Get Balance</button>
-          <button class="card card-small" id="sign-message-btn">Sign Message</button>
-          <button class="card card-small" id="send-transaction-btn">Send Transaction</button>
-          <button class="card card-small" id="logout-btn">Log Out</button>
-        </div>
-        <div id="logged-out-view" class="card-container">
-          <button class="card card-small" id="login-btn">Login</button>
-        </div>
-        <div class="console" id="console-ui">
-          <p class="code">Logged In</p>
-        </div>
+
+      <!-- IMP START - Login -->
+      <div id="logged-out-view" class="grid">
+        <button id="login-btn" class="card" type="button">Login</button>
+        <div id="connect-loading" class="loading" style="display: none">Connecting...</div>
+        <div id="connect-error" class="error" style="display: none"></div>
       </div>
+      <!-- IMP END - Login -->
+
+      <div id="logged-in-view" class="grid" style="display: none">
+        <h2>Connected to <span id="connector-name"></span></h2>
+        <!-- IMP START - Blockchain Calls -->
+        <div id="user-address"></div>
+        <!-- IMP END - Blockchain Calls -->
+        <div class="flex-container">
+          <div>
+            <button id="get-user-info-btn" class="card" type="button">Get User Info</button>
+          </div>
+          <!-- IMP START - Logout -->
+          <div>
+            <button id="logout-btn" class="card" type="button">Log Out</button>
+            <div id="disconnect-loading" class="loading" style="display: none">Disconnecting...</div>
+            <div id="disconnect-error" class="error" style="display: none"></div>
+          </div>
+          <!-- IMP END - Logout -->
+        </div>
+
+        <!-- IMP START - Blockchain Calls -->
+        <div>
+          <h2>Send Transaction</h2>
+          <form id="send-tx-form">
+            <input name="address" placeholder="Address" required />
+            <input
+              name="value"
+              placeholder="Amount (ETH)"
+              type="number"
+              step="0.000000001"
+              required
+            />
+            <button type="submit">Send</button>
+          </form>
+          <div id="send-hash"></div>
+          <div id="send-confirming" style="display: none">Waiting for confirmation...</div>
+          <div id="send-confirmed" style="display: none">Transaction confirmed.</div>
+          <div id="send-error" class="error" style="display: none"></div>
+        </div>
+
+        <div>
+          <h2>Balance</h2>
+          <div>
+            <span id="balance-value"></span>
+            <span id="balance-loading" style="display: none">Loading...</span>
+            <span id="balance-error" class="error" style="display: none"></span>
+          </div>
+        </div>
+
+        <div>
+          <h2>Sign Message</h2>
+          <form id="sign-message-form">
+            <input name="message" placeholder="Message" required />
+            <button type="submit">Sign</button>
+          </form>
+          <div id="sign-signature" class="signature"></div>
+          <div id="sign-error" class="error" style="display: none"></div>
+        </div>
+
+        <div>
+          <h2>Switch Chain</h2>
+          <h3>Connected to <span id="chain-id"></span></h3>
+          <div id="switch-chain-buttons" class="flex-row"></div>
+          <div id="switch-chain-error" class="error" style="display: none"></div>
+        </div>
+        <!-- IMP END - Blockchain Calls -->
+      </div>
+
+      <div id="console" style="white-space: pre-line">
+        <p style="white-space: pre-line"></p>
+      </div>
+
       <footer class="footer">
         <a
           href="https://github.com/Web3Auth/web3auth-examples/tree/main/quick-starts/vanillajs-quick-start"
@@ -50,4 +115,3 @@
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
-

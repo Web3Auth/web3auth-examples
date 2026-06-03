@@ -1,6 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+/* Scoped to .w3a-example to avoid affecting Web3Auth modal UI */
 :root {
-	/* Variables for light/dark mode support */
 	--primary-color: #0364ff;
 	--primary-hover: #0050cc;
 	--bg-color: #ffffff;
@@ -15,7 +14,6 @@
 	--font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
-/* Dark Mode Variables */
 @media (prefers-color-scheme: dark) {
 	:root {
 		--primary-color: #529dff;
@@ -29,9 +27,30 @@
 		--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
 		--shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
 	}
+
+	.w3a-example input,
+	.w3a-example select,
+	.w3a-example textarea {
+		background-color: var(--bg-light);
+		border-color: var(--border-color);
+		color: var(--text-color);
+	}
+
+	.w3a-example button,
+	.w3a-example .card {
+		background-color: var(--bg-light);
+		border-color: var(--border-color);
+		color: var(--text-color);
+	}
+
+	.w3a-example button:hover,
+	.w3a-example .card:hover {
+		background-color: var(--bg-hover);
+		border-color: var(--text-muted);
+	}
 }
 
-* {
+.w3a-example * {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
@@ -44,42 +63,14 @@ body {
 	line-height: 1.6;
 }
 
-a {
-	color: var(--primary-color);
-	text-decoration: none;
-}
-
-button {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	padding: 12px 16px;
-	background-color: var(--bg-light);
-	border: 1px solid var(--border-color);
-	border-radius: var(--radius);
-	color: var(--text-color);
-	font-weight: 500;
-	font-size: 14px;
-	cursor: pointer;
-	transition: all 0.2s ease;
-	box-shadow: var(--shadow-sm);
-}
-
-button:hover {
-	background-color: var(--bg-hover);
-	box-shadow: var(--shadow-md);
-	transform: translateY(-1px);
-}
-
-.content {
+.container {
 	width: 100%;
-	padding: 0 16px;
+	padding: 32px 16px;
 	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	min-height: 100vh;
-	padding: 32px 0;
 }
 
 .title {
@@ -90,24 +81,26 @@ button:hover {
 	font-weight: 600;
 }
 
-.title a {
+.w3a-example .title a {
 	color: var(--primary-color);
 	text-decoration: none;
 }
 
-.setting {
-	width: 100%;
-	max-width: 560px;
+h2 {
+	font-size: 24px;
+	margin: 24px 0 16px;
+	font-weight: 600;
 }
 
-.card-container {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	margin-bottom: 16px;
+h3 {
+	font-size: 20px;
+	margin: 16px 0 12px;
+	font-weight: 500;
+	color: var(--text-muted);
 }
 
-.card {
+.w3a-example button,
+.w3a-example .card {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -121,23 +114,77 @@ button:hover {
 	cursor: pointer;
 	transition: all 0.2s ease;
 	box-shadow: var(--shadow-sm);
-	width: 100%;
-	margin: 8px 0;
-	text-align: center;
 }
 
-.card:hover {
+.w3a-example button:hover,
+.w3a-example .card:hover {
 	background-color: var(--bg-hover);
 	box-shadow: var(--shadow-md);
 	transform: translateY(-1px);
 }
 
-.console {
+.w3a-example .card {
 	width: 100%;
-	margin-top: 24px;
+	margin: 8px 0;
+	text-align: center;
 }
 
-.code {
+.w3a-example button[disabled] {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.w3a-example form {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 12px;
+	margin: 16px 0;
+}
+
+.w3a-example input,
+.w3a-example select,
+.w3a-example textarea {
+	width: 100%;
+	padding: 12px 16px;
+	border: 1px solid var(--border-color);
+	border-radius: var(--radius);
+	background-color: var(--bg-color);
+	color: var(--text-color);
+	font-family: var(--font-sans);
+	font-size: 14px;
+}
+
+.w3a-example input:focus,
+.w3a-example select:focus,
+.w3a-example textarea:focus {
+	outline: none;
+	border-color: var(--primary-color);
+	box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+}
+
+.flex-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	width: 100%;
+}
+
+.flex-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	width: 100%;
+}
+
+.grid {
+	display: grid;
+	gap: 16px;
+	width: 100%;
+}
+
+#console {
 	width: 100%;
 	max-height: 250px;
 	overflow: auto;
@@ -145,11 +192,13 @@ button:hover {
 	font-family: monospace;
 	font-size: 14px;
 	padding: 16px;
-	margin: 0;
+	margin: 24px 0;
 	background-color: #0a0a0a;
 	color: #e0e0e0;
-	border-radius: 0;
-	border: none;
+}
+
+.signature {
+	overflow-wrap: anywhere;
 }
 
 .footer {
@@ -168,49 +217,56 @@ button:hover {
 	color: var(--text-muted);
 	text-decoration: none;
 	font-size: 14px;
-	transition: color 0.2s ease;
 }
 
 .footer a:hover {
 	color: var(--primary-color);
 }
 
-/* Media queries for larger screens */
+.error {
+	color: red;
+}
+
+.loading {
+	color: var(--primary-color);
+}
+
 @media (min-width: 640px) {
-	.content {
+	.container {
 		max-width: 640px;
 	}
-	
+
 	.title {
 		font-size: 32px;
 	}
-	
-	.card-container {
+
+	.w3a-example form {
 		flex-direction: row;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 12px;
+		align-items: flex-start;
 	}
-	
-	.card {
+
+	.w3a-example form button {
+		margin-top: 0;
+	}
+
+	.w3a-example .card {
 		width: auto;
 		margin: 0;
 	}
 }
 
 @media (min-width: 768px) {
-	.content {
+	.container {
 		max-width: 768px;
 	}
-	
+
 	.title {
 		font-size: 36px;
 	}
 }
 
 @media (min-width: 1024px) {
-	.content {
+	.container {
 		max-width: 1024px;
 	}
 }
-
