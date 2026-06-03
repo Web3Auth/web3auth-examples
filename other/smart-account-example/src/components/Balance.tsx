@@ -1,8 +1,8 @@
-import { useAccount, useBalance } from "wagmi";
+import { useConnection, useBalance } from "wagmi";
 import { formatUnits } from "viem";
 
 export function Balance() {
-  const { address } = useAccount()
+  const { address } = useConnection()
 
   const { data: default_ } = useBalance({ address })
 

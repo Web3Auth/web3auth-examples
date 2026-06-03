@@ -1,25 +1,27 @@
 /* eslint-disable no-console */
 import "./App.css";
-import { useEnableMFA, useManageMFA, useWeb3AuthConnect, useWeb3AuthDisconnect, useWeb3AuthUser} from "@web3auth/modal/react";
+import { useEnableMFA, useManageMFA, useWeb3AuthConnect, useWeb3AuthDisconnect, useWeb3AuthUser } from "@web3auth/modal/react";
 import { WALLET_CONNECTORS, AUTH_CONNECTION } from "@web3auth/modal";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { SendTransaction } from "./components/sendTransaction";
 import { Balance } from "./components/getBalance";
 import { SwitchChain } from "./components/switchNetwork";
+import { SignMessage } from "./components/signMessage";
 import { useState } from "react";
 
 function App() {
   const { connectTo, isConnected, connectorName } = useWeb3AuthConnect();
   const { disconnect } = useWeb3AuthDisconnect();
   const { userInfo } = useWeb3AuthUser();
-  const { address } = useAccount();
+  const { address } = useConnection();
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
   const { manageMFA, loading: manageMFALoading, error: manageMFAError } = useManageMFA();
   const { enableMFA, loading: enableMFALoading, error: enableMFAError } = useEnableMFA();
 
   const getIdToken = async () => {
     // Get ID Token from server
-    const res = await fetch("http://localhost:8080/api/token", {
+    const res = await fetch(
+      (import.meta.env.VITE_JWT_SERVER_URL || "http://localhost:8080") + "/api/token", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -92,6 +94,7 @@ function App() {
       <SendTransaction />
       <Balance />
       <SwitchChain />
+      <SignMessage />
     </>
   );
 
@@ -108,9 +111,9 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
       <h1 className="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/no-modal" rel="noreferrer">
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth{" "}
         </a>
         & React No Modal with Custom JWT

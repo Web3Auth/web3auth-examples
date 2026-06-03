@@ -61,9 +61,9 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
       <h1 className="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/modal" rel="noreferrer">
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth{" "}
         </a>
         & React Modal Solana Quick Start

@@ -1,17 +1,20 @@
-import { WEB3AUTH_NETWORK, type Web3AuthOptions } from "@web3auth/modal";
+// IMP START - Quick Start
+import { WEB3AUTH_NETWORK } from "@web3auth/modal";
+import { type Web3AuthContextConfig } from "@web3auth/modal/react";
+// IMP END - Quick Start
 
-// Dashboard Registration
+// IMP START - Dashboard Registration
 const clientId = import.meta.env.VITE_WEB3AUTH_CLIENT_ID;
+// IMP END - Dashboard Registration
 
-// Instantiate SDK
-const web3AuthOptions: Web3AuthOptions = {
-  clientId,
-  web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
-  authBuildEnv: "testing",
+// IMP START - Config
+const web3AuthContextConfig: Web3AuthContextConfig = {
+  web3AuthOptions: {
+    clientId,
+    web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+    authBuildEnv: "testing",
+  },
 };
+// IMP END - Config
 
-const web3AuthContextConfig = {
-  web3AuthOptions
-};
-
-export default web3AuthContextConfig; 
+export default web3AuthContextConfig;

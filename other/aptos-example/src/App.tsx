@@ -1,59 +1,63 @@
 import "./App.css";
+import { useEffect, useState } from "react";
 import {
   useWeb3AuthConnect, useWeb3AuthDisconnect, useWeb3AuthUser, useWeb3Auth
 } from "@web3auth/modal/react";
-import { getAccounts, getBalance, getAirdrop, sendTransaction, getPrivateKey } from "./aptosRPC";
+import { getAccounts, getBalance, getAirdrop, sendTransaction } from "./aptosRPC";
 
 function App() {
   const { connect, isConnected, loading: connectLoading, error: connectError } = useWeb3AuthConnect();
   const { disconnect, loading: disconnectLoading, error: disconnectError } = useWeb3AuthDisconnect();
   const { userInfo } = useWeb3AuthUser();
-  const { provider } = useWeb3Auth();
+  const { connection } = useWeb3Auth();
+  const [privateKey, setPrivateKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!connection?.ethereumProvider) return;
+    (connection.ethereumProvider.request({ method: "private_key" }) as Promise<string>)
+      .then((k) => setPrivateKey(k ?? null))
+      .catch(console.error);
+  }, [connection]);
 
   const onGetPrivateKey = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    const privateKey = await getPrivateKey(provider);
     uiConsole("Private Key", privateKey);
   };
 
   const onGetAccounts = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
+    if (!privateKey) {
+      uiConsole("Not connected yet");
       return;
     }
-    const userAccount = await getAccounts(provider);
+    const userAccount = await getAccounts(privateKey);
     uiConsole("Address", userAccount);
   };
 
   const onGetBalance = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
+    if (!privateKey) {
+      uiConsole("Not connected yet");
       return;
     }
-    const address = await getAccounts(provider);
-    const balance = await getBalance(provider, address);
+    const address = await getAccounts(privateKey);
+    const balance = await getBalance(address);
     uiConsole("Balance", balance);
   };
 
   const onGetAirdrop = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
+    if (!privateKey) {
+      uiConsole("Not connected yet");
       return;
     }
-    const address = await getAccounts(provider);
-    const result = await getAirdrop(provider, address, 1000000000000000);
+    const address = await getAccounts(privateKey);
+    const result = await getAirdrop(address, 1000000000000000);
     uiConsole("Airdropped some tokens TxID: ", result.hash);
   };
 
   const onSendTransaction = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
+    if (!privateKey) {
+      uiConsole("Not connected yet");
       return;
     }
-    const result = await sendTransaction(provider);
+    const result = await sendTransaction(privateKey);
     uiConsole("Transaction ID: ", result);
   };
 
@@ -120,9 +124,9 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
       <h1 className="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/no-modal" rel="noreferrer">
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth{" "}
         </a>
         & Aptos Example

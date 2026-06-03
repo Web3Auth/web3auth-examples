@@ -1,10 +1,8 @@
-import { IProvider } from "@web3auth/modal";
 import algosdk from "algosdk";
 
-// Helper function to create Algorand client
 export const makeClient = async (): Promise<algosdk.Algodv2> => {
   const algodToken = {
-    "x-api-key": "yay5jiXMXr88Bi8nsG1Af9E1X3JfwGOC2F7222r3", // Replace with your PureStake API key or use environment variable
+    "x-api-key": "yay5jiXMXr88Bi8nsG1Af9E1X3JfwGOC2F7222r3",
   };
   const algodServer = "https://testnet-algorand.api.purestake.io/ps2";
   const algodPort = "";
@@ -12,37 +10,27 @@ export const makeClient = async (): Promise<algosdk.Algodv2> => {
   return algodClient;
 };
 
-// Function to get Algorand key pair from provider
-export const getAlgorandKeyPair = async (
-  provider: IProvider
-): Promise<algosdk.Account> => {
-  const privateKey = (await provider.request({
-    method: "private_key",
-  })) as string;
-  // Convert hex private key to Uint8Array
+export const getAlgorandKeyPair = async (privateKey: string): Promise<algosdk.Account> => {
   const privateKeyUint8 = Uint8Array.from(Buffer.from(privateKey, "hex"));
   const passphrase = algosdk.secretKeyToMnemonic(privateKeyUint8);
   const keyPair = algosdk.mnemonicToSecretKey(passphrase);
   return keyPair;
 };
 
-// Function to get account address
-export const getAccounts = async (provider: IProvider): Promise<string> => {
-  const keyPair = await getAlgorandKeyPair(provider);
+export const getAccounts = async (privateKey: string): Promise<string> => {
+  const keyPair = await getAlgorandKeyPair(privateKey);
   return keyPair.addr;
 };
 
-// Function to get account balance
-export const getBalance = async (provider: IProvider): Promise<number> => {
-  const keyPair = await getAlgorandKeyPair(provider);
+export const getBalance = async (privateKey: string): Promise<number> => {
+  const keyPair = await getAlgorandKeyPair(privateKey);
   const client = await makeClient();
   const balance = await client.accountInformation(keyPair.addr).do();
   return balance.amount;
 };
 
-// Function to sign a message
-export const signMessage = async (provider: IProvider): Promise<string> => {
-  const keyPair = await getAlgorandKeyPair(provider);
+export const signMessage = async (privateKey: string): Promise<string> => {
+  const keyPair = await getAlgorandKeyPair(privateKey);
   const client = await makeClient();
   const params = await client.getTransactionParams().do();
   const enc = new TextEncoder();
@@ -60,24 +48,18 @@ export const signMessage = async (provider: IProvider): Promise<string> => {
   return txId;
 };
 
-// Function to sign and send a transaction
-export const signAndSendTransaction = async (
-  provider: IProvider
-): Promise<string | undefined> => {
+export const signAndSendTransaction = async (privateKey: string): Promise<string | undefined> => {
   try {
-    const keyPair = await getAlgorandKeyPair(provider);
+    const keyPair = await getAlgorandKeyPair(privateKey);
     const client = await makeClient();
     const params = await client.getTransactionParams().do();
     const enc = new TextEncoder();
     const message = enc.encode("Web3Auth says hello!");
 
-    // You need to have some funds in your account to send a transaction
-    // You can get some testnet funds here: https://bank.testnet.algorand.network/
-
     const txn = algosdk.makePaymentTxnWithSuggestedParams(
-      keyPair.addr, // sender
-      keyPair.addr, // receiver
-      1000, // amount
+      keyPair.addr,
+      keyPair.addr,
+      1000,
       undefined,
       message,
       params
@@ -89,6 +71,6 @@ export const signAndSendTransaction = async (
     return txHash.txId;
   } catch (error) {
     console.error("Error signing and sending transaction:", error);
-    return undefined; // Return undefined or throw error as preferred
+    return undefined;
   }
 };

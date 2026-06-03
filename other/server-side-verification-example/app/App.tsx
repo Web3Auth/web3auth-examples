@@ -1,8 +1,8 @@
 import "react-toastify/dist/ReactToastify.css";
 
 import { toast } from "react-toastify";
-import { useWeb3AuthConnect, useWeb3AuthDisconnect, useWeb3AuthUser, useIdentityToken, useWeb3Auth} from "@web3auth/modal/react";
-import { useAccount } from "wagmi";
+import { useWeb3AuthConnect, useWeb3AuthDisconnect, useWeb3AuthUser, useAuthTokenInfo, useWeb3Auth} from "@web3auth/modal/react";
+import { useConnection } from "wagmi";
 import { SendTransaction } from "../components/sendTransaction";
 import { Balance } from "../components/getBalance";
 import { SwitchChain } from "../components/switchNetwork";
@@ -11,10 +11,10 @@ import { useEffect } from "react";
 function App() {
   const { connect, isConnected, loading: connectLoading, error: connectError, connectorName } = useWeb3AuthConnect();
   const { disconnect, loading: disconnectLoading, error: disconnectError } = useWeb3AuthDisconnect();
+  const { connection } = useWeb3Auth();
   const { userInfo } = useWeb3AuthUser();
-  const { token, getIdentityToken, loading: idTokenLoading, error: idTokenError } = useIdentityToken();
-  const { web3Auth } = useWeb3Auth();
-  const { address, connector } = useAccount();
+  const { token, getAuthTokenInfo, loading: idTokenLoading, error: idTokenError } = useAuthTokenInfo();
+  const { address } = useConnection();
 
   function uiConsole(...args: any[]): void {
     const el = document.querySelector("#console>p");
@@ -25,12 +25,12 @@ function App() {
   }
 
   const validateIdToken = async () => {
-    const idToken = await getIdentityToken();
+    const idToken = await getAuthTokenInfo();
     
     let res;
     if (connectorName === "auth") {
-      // Social login: send public key
-      const pubKey = await web3Auth?.provider?.request({ method: "public_key" });
+      // Social login: no hook exposes the app public key, use the escape hatch
+      const pubKey = await connection?.ethereumProvider?.request({ method: "public_key" });
       console.log("pubKey:", pubKey);
       res = await fetch("/api/login", {
         method: "POST",
@@ -41,8 +41,7 @@ function App() {
         body: JSON.stringify({ appPubKey: pubKey }),
       });
     } else {
-      // External wallet: send address
-      const address = await web3Auth?.provider?.request({ method: "eth_accounts" });
+      // External wallet: wagmi's useAccount().address already has this
       res = await fetch("/api/login-external", {
         method: "POST",
         headers: {
@@ -81,7 +80,7 @@ function App() {
 
   const loggedInView = (
     <div className="grid">
-      <h2>Connected to {connector?.name}</h2>
+      <h2>Connected to {connectorName}</h2>
       <div>{address}</div>
       <div className="flex-container"> 
         <div>
@@ -90,7 +89,7 @@ function App() {
           </button>
         </div>
         <div>
-          <button onClick={() => getIdentityToken().then(() => uiConsole(token))} className="card">
+          <button onClick={() => getAuthTokenInfo().then(() => uiConsole(token))} className="card">
             Get ID Token
           </button>
           {idTokenLoading && <div className="loading">Getting ID Token...</div>}
@@ -126,9 +125,9 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
           <h1 className="title">
-            <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/no-modal" rel="noreferrer">
+            <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
               Web3Auth{" "}
             </a>
             & Next.js No Modal Server Side Verification Example

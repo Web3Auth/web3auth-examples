@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useWeb3AuthConnect, useWeb3AuthDisconnect, useWeb3AuthUser, useWeb3Auth } from "@web3auth/modal/react";
 import {
-  getBitcoinPrivateKey,
   getBitcoinAddressAndKeys,
   getBitcoinBalance,
   sendTaprootTransaction
@@ -14,7 +13,15 @@ function App() {
   const { connect, isConnected, connectorName, loading: connectLoading, error: connectError } = useWeb3AuthConnect();
   const { disconnect, loading: disconnectLoading, error: disconnectError } = useWeb3AuthDisconnect();
   const { userInfo } = useWeb3AuthUser();
-  const { provider } = useWeb3Auth();
+  const { connection } = useWeb3Auth();
+  const [privateKey, setPrivateKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!connection?.ethereumProvider) return;
+    (connection.ethereumProvider.request({ method: "private_key" }) as Promise<string>)
+      .then((k) => setPrivateKey(k ?? null))
+      .catch(console.error);
+  }, [connection]);
 
   const login = async () => {
     await connect();
@@ -27,6 +34,7 @@ function App() {
   const logout = async () => {
     await disconnect();
     setCurrentBitcoinAddress(null);
+    setPrivateKey(null);
     if (disconnectError) {
       console.error(disconnectError);
       setError(disconnectError.message);
@@ -41,15 +49,14 @@ function App() {
   };
 
   const deriveAndSetAddress = async () => {
-    if (!provider) {
-      uiConsole("Provider not available");
-      setError("Provider not available");
+    if (!privateKey) {
+      uiConsole("Not connected yet");
+      setError("Not connected yet");
       return;
     }
     try {
       setError(null);
-      const pk = await getBitcoinPrivateKey(provider);
-      const { address } = getBitcoinAddressAndKeys(pk);
+      const { address } = getBitcoinAddressAndKeys(privateKey);
       if (address) {
         setCurrentBitcoinAddress(address);
         console.log("Bitcoin Taproot Address Derived: ", address);
@@ -85,17 +92,16 @@ function App() {
   };
 
   const onSendTaprootTransaction = async () => {
-    if (!provider) {
-      uiConsole("Provider not available");
-      setError("Provider not available");
+    if (!privateKey) {
+      uiConsole("Not connected yet");
+      setError("Not connected yet");
       return;
     }
     const destinationAddress = "tb1ph9cxmts2r8z56mfzyhem74pep0kfz2k0pc56uhujzx0c3v2rrgssx8zc5q";
     try {
       setError(null);
       uiConsole("Sending transaction...");
-      const pk = await getBitcoinPrivateKey(provider);
-      const txid = await sendTaprootTransaction(pk, destinationAddress);
+      const txid = await sendTaprootTransaction(privateKey, destinationAddress);
       console.log("Transaction sent successfully:", txid);
       uiConsole("Transaction sent successfully! TXID:", txid);
       if (currentBitcoinAddress) await getBitcoinBalance(currentBitcoinAddress);
@@ -137,9 +143,9 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
       <h1 className="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/no-modal" rel="noreferrer">
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth
         </a>{" "}
         & Bitcoin No Modal Example

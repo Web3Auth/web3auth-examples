@@ -15,46 +15,47 @@ declare global {
 function App() {
   const { connect, isConnected, loading: connectLoading, error: connectError } = useWeb3AuthConnect();
   const { disconnect, loading: disconnectLoading, error: disconnectError } = useWeb3AuthDisconnect();  
-  const { provider } = useWeb3Auth();
+  const { connection } = useWeb3Auth();
   
   const [address, setAddress] = useState<string | null>(null);
   const [wallet, setWallet] = useState<any | null>(null);
 
   useEffect(() => {
     const getDetails = async () => {
-      if (isConnected && provider) {
+      const ethereumProvider = connection?.ethereumProvider;
+      if (isConnected && ethereumProvider) {
         try {
-          const address = await getAccounts();
-          setAddress(address);
-          const wallet = await getWallet();
-          setWallet(wallet);
+          const addr = await getAccounts();
+          setAddress(addr);
+          const w = await getWallet();
+          setWallet(w);
         } catch (err) {
           console.error(err);
         }
       }
     };
     getDetails();
-  }, [provider, isConnected]);
+  }, [connection, isConnected]);
 
   const getWallet = async (): Promise<JsonRpcSigner | null> => {
-    if (!provider) {
+    const ethereumProvider = connection?.ethereumProvider;
+    if (!ethereumProvider) {
       uiConsole("provider not initialized yet");
       return null;
     }
-    const ethersProvider = new ethers.BrowserProvider(provider as any);
+    const ethersProvider = new ethers.BrowserProvider(ethereumProvider as any);
     return ethersProvider.getSigner();
   };
 
   const getAccounts = async (): Promise<any> => {
-    if (!provider) {
+    const ethereumProvider = connection?.ethereumProvider;
+    if (!ethereumProvider) {
       uiConsole("provider not initialized yet");
       return;
     }
     try {
-      const ethersProvider = new ethers.BrowserProvider(provider as any);
+      const ethersProvider = new ethers.BrowserProvider(ethereumProvider as any);
       const signer = await ethersProvider.getSigner();
-
-      // Get user's Ethereum public address
       const address = await signer.getAddress();
       return address;
     } catch (error) {
@@ -122,7 +123,12 @@ function App() {
 
   return (
     <div style={styles.HomePageWrapperStyle}>
-      <h1>Web3Auth XMTP Quickstart </h1>
+      <h1>
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
+          Web3Auth
+        </a>{" "}
+        XMTP Quickstart
+      </h1>
       <button 
         className="home-button" 
         style={{ ...styles.ButtonStyledStyle, marginLeft: 10 }} 

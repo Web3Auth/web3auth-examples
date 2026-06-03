@@ -1,25 +1,14 @@
 import { BigNumber, Polymesh } from "@polymeshassociation/polymesh-sdk";
 import { LocalSigningManager } from "@polymeshassociation/local-signing-manager";
-import type { IProvider } from "@web3auth/modal";
 
 let api: Polymesh;
 
-export const getPrivateKey = async (provider: IProvider): Promise<string | null> => {
-  try {
-    const privateKey = (await provider.request({ method: "private_key" })) as string;
-    return privateKey ? "0x" + privateKey : null;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-
-const connectPolymesh = async (provider: IProvider) => {
+const connectPolymesh = async (rawPrivateKey: string) => {
   if (!api) {
     console.log("Connecting to polymesh...");
-    const privateKey = (await getPrivateKey(provider)) as string;
+    const formattedKey = "0x" + rawPrivateKey;
     const localSigningManager = await LocalSigningManager.create({
-      accounts: [{ seed: privateKey, derivationPath: "" }],
+      accounts: [{ seed: formattedKey, derivationPath: "" }],
     });
     api = await Polymesh.connect({
       nodeUrl: "wss://testnet-rpc.polymesh.live",
@@ -28,11 +17,9 @@ const connectPolymesh = async (provider: IProvider) => {
   }
 };
 
-export const getAccounts = async (provider: IProvider) => {
+export const getAccounts = async (rawPrivateKey: string) => {
   try {
-    if (!api) {
-      await connectPolymesh(provider);
-    }
+    await connectPolymesh(rawPrivateKey);
     const key = api.accountManagement.getSigningAccount();
     if (key == null) throw new Error("No key found");
     const { address: ss58EncodedKey, key: rawPublicKey } = key;
@@ -43,11 +30,9 @@ export const getAccounts = async (provider: IProvider) => {
   }
 };
 
-export const getIdentity = async (provider: IProvider) => {
+export const getIdentity = async (rawPrivateKey: string) => {
   try {
-    if (!api) {
-      await connectPolymesh(provider);
-    }
+    await connectPolymesh(rawPrivateKey);
     const identity = await api.getSigningIdentity();
     console.log(`Signing Identity: ${identity?.did || "No identity found"}`);
     return identity?.did || "";
@@ -56,11 +41,9 @@ export const getIdentity = async (provider: IProvider) => {
   }
 };
 
-export const getBalance = async (provider: IProvider) => {
+export const getBalance = async (rawPrivateKey: string) => {
   try {
-    if (!api) {
-      await connectPolymesh(provider);
-    }
+    await connectPolymesh(rawPrivateKey);
     const balance = await api.accountManagement.getAccountBalance();
     console.log(`Signing Key Balance: ${JSON.stringify(balance)}`);
     return balance;
@@ -69,14 +52,12 @@ export const getBalance = async (provider: IProvider) => {
   }
 };
 
-export const transferPolyx = async (provider: IProvider) => {
+export const transferPolyx = async (rawPrivateKey: string) => {
   try {
-    if (!api) {
-      await connectPolymesh(provider);
-    }
+    await connectPolymesh(rawPrivateKey);
     const amount = new BigNumber(1);
     const to = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
-    const from = (await getAccounts(provider))?.ss58EncodedKey;
+    const from = (await getAccounts(rawPrivateKey))?.ss58EncodedKey;
 
     const transferTx = await api.network.transferPolyx({ amount, to });
 

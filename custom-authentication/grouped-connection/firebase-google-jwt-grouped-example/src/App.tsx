@@ -6,9 +6,9 @@ import { GithubAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { SendTransaction } from "./components/sendTransaction";
 import { Balance } from "./components/getBalance";
 import { SwitchChain } from "./components/switchNetwork";
-import { useAccount } from "wagmi";
+import { SignMessage } from "./components/signMessage";
+import { useConnection } from "wagmi";
 import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
-
 // Firebase configuration — values come from .env (see .env.example)
 // Firebase browser API keys are intentionally public identifiers; security is enforced via Firebase Auth rules
 const firebaseConfig = {
@@ -24,7 +24,7 @@ function App() {
   const { connectTo, isConnected, connectorName } = useWeb3AuthConnect();
   const { disconnect } = useWeb3AuthDisconnect();
   const { userInfo } = useWeb3AuthUser();
-  const { address } = useAccount();
+  const { address } = useConnection();
 
   const loginWithGoogle = async (response: CredentialResponse) => {
     const idToken = response.credential;
@@ -87,6 +87,7 @@ function App() {
       <SendTransaction />
       <Balance />
       <SwitchChain />
+      <SignMessage />
     </>
   );
 
@@ -112,9 +113,9 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
       <h1 className="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/no-modal" rel="noreferrer">
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth{" "}
         </a>
         & React No Modal with Firebase & Google Grouped Connection JWT
@@ -127,7 +128,7 @@ function App() {
 
       <footer className="footer">
         <a
-          href="https://github.com/Web3Auth/web3auth-examples/tree/main/web-no-modal-sdk/custom-authentication/grouped-connection/firebase-google-jwt-grouped-no-modal-example"
+          href="https://github.com/Web3Auth/web3auth-examples/tree/main/custom-authentication/grouped-connection/firebase-google-jwt-grouped-example"
           target="_blank"
           rel="noopener noreferrer"
         >

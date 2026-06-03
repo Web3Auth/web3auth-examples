@@ -2,10 +2,12 @@
 <html lang="en">
   <head>
     <script type="module">
+      // IMP START - Bundler Issues
       import { Buffer } from "buffer";
       import process from "process";
       window.Buffer = Buffer;
       window.process = process;
+      // IMP END - Bundler Issues
     </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -13,7 +15,6 @@
     <title>Web3Auth Modal Demo App - Starknet Example</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

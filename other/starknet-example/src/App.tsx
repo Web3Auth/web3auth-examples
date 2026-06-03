@@ -5,6 +5,7 @@ import {
   useWeb3AuthUser,
 } from "@web3auth/modal/react";
 import "./App.css";
+import { useEffect, useState } from "react";
 import {
   deployAccount,
   getAccounts,
@@ -16,17 +17,23 @@ import { RpcProvider } from "starknet";
 const isProduction = process.env.NODE_ENV === "production";
 
 function App() {
-  // StarkNet provider setup
   const starknetProvider = new RpcProvider({
     nodeUrl: isProduction
       ? "https://starknet-mainnet.public.blastapi.io/rpc/v0_8"
       : "https://starknet-sepolia.public.blastapi.io/rpc/v0_8",
   });
 
-  const { provider: web3authProvider } = useWeb3Auth();
+  const { connection } = useWeb3Auth();
   const { userInfo } = useWeb3AuthUser();
+  const [rawPrivateKey, setRawPrivateKey] = useState<string | null>(null);
 
-  // Web3Auth hooks
+  useEffect(() => {
+    if (!connection?.ethereumProvider) return;
+    (connection.ethereumProvider.request({ method: "private_key" }) as Promise<string>)
+      .then((k) => setRawPrivateKey(k ?? null))
+      .catch(console.error);
+  }, [connection]);
+
   const {
     connect,
     isConnected,
@@ -41,42 +48,42 @@ function App() {
   } = useWeb3AuthDisconnect();
 
   const onGetPrivateKey = async () => {
-    if (!web3authProvider) {
-      uiConsole("provider not initialized yet");
+    if (!rawPrivateKey) {
+      uiConsole("Not connected yet");
       return;
     }
-    const privateKey = await getPrivateKey({ provider: web3authProvider });
-    uiConsole("Private Key", privateKey);
+    const starknetKey = getPrivateKey(rawPrivateKey);
+    uiConsole("Private Key (grinded for Starknet)", starknetKey);
   };
 
   const onGetAccounts = async () => {
-    if (!web3authProvider) {
-      uiConsole("provider not initialized yet");
+    if (!rawPrivateKey) {
+      uiConsole("Not connected yet");
       return;
     }
-    const userAccount = await getAccounts(web3authProvider);
+    const userAccount = await getAccounts(rawPrivateKey);
     uiConsole("Address", userAccount);
   };
 
   const onDeployAccount = async () => {
-    if (!web3authProvider) {
-      uiConsole("provider not initialized yet");
+    if (!rawPrivateKey) {
+      uiConsole("Not connected yet");
       return;
     }
     const userAccount = await deployAccount({
-      web3authProvider,
+      privateKey: rawPrivateKey,
       starknetProvider: starknetProvider,
     });
     uiConsole("Address", userAccount);
   };
 
   const onGetBalance = async () => {
-    if (!web3authProvider) {
-      uiConsole("provider not initialized yet");
+    if (!rawPrivateKey) {
+      uiConsole("Not connected yet");
       return;
     }
     const balance = await getBalance({
-      web3authProvider,
+      privateKey: rawPrivateKey,
       starknetProvider: starknetProvider,
     });
     uiConsole("Balance", balance);
@@ -84,7 +91,6 @@ function App() {
 
   const loggedInView = (
     <div className="grid">
-      {/* Funding Notice */}
       <div className="funding-notice">
         <p>
           Note: Before deploying your StarkNet account, you need to fund your
@@ -151,11 +157,11 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
       <h1 className="title">
         <a
           target="_blank"
-          href="https://web3auth.io/docs/sdk/pnp/web/no-modal"
+          href="https://docs.metamask.io/embedded-wallets/sdk/react/"
           rel="noreferrer"
         >
           Web3Auth{" "}

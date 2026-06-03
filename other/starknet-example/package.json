@@ -4,14 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "vite",
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint"
   },
   "dependencies": {
     "@starkware-industries/starkware-crypto-utils": "^0.2.1",
-    "@web3auth/modal": "^10.15.0",
+    "@web3auth/modal": "^11.0.1",
     "bn.js": "^5.2.2",
     "elliptic": "^6.6.1",
     "react": "^18.3.1",
@@ -24,13 +25,14 @@
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.6.0",
-    "buffer": "^6.0.3",
     "eslint": "^9.30.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
-    "typescript": "~5.8.3",
+    "typescript": "^5.7.3",
     "typescript-eslint": "^8.35.1",
-    "vite": "^7.0.4"
+    "vite": "^7.0.4",
+    "buffer": "^6.0.3",
+    "process": "^0.11.10"
   }
 }

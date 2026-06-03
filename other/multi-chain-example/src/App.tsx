@@ -5,7 +5,6 @@ import {
   useWeb3AuthUser,
   useWeb3Auth
 } from "@web3auth/modal/react";
-
 // Import RPC classes
 import {getEthereumAccounts, getEthereumBalance, signEthereumMessage, sendEthereumTransaction} from "./RPC/ethersRPC";
 import {getSolanaAccount, getSolanaBalance, signSolanaMessage, sendSolanaTransaction} from "./RPC/solanaRPC";
@@ -16,7 +15,8 @@ function App() {
   const { connect, isConnected, loading: connectLoading, error: connectError } = useWeb3AuthConnect();
   const { disconnect, loading: disconnectLoading, error: disconnectError } = useWeb3AuthDisconnect();
   const { userInfo } = useWeb3AuthUser();
-  const { provider } = useWeb3Auth();
+  const { connection } = useWeb3Auth();
+  const provider = connection?.ethereumProvider ?? null;
 
   const getAllAccounts = async () => {
     if (!provider) {
@@ -214,9 +214,9 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
       <h1 className="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/no-modal" rel="noreferrer">
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth{" "}
         </a>
         & React Multi-chain Example

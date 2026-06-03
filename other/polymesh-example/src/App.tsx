@@ -1,57 +1,62 @@
 import "./App.css";
+import { useEffect, useState } from "react";
 import {
   useWeb3AuthConnect, useWeb3AuthDisconnect, useWeb3AuthUser, useWeb3Auth
 } from "@web3auth/modal/react";
-import { getPrivateKey, getAccounts, getBalance, getIdentity, transferPolyx } from "./polymeshRPC";
+import { getAccounts, getBalance, getIdentity, transferPolyx } from "./polymeshRPC";
 
 function App() {
   const { connect, isConnected, loading: connectLoading, error: connectError } = useWeb3AuthConnect();
   const { disconnect, loading: disconnectLoading, error: disconnectError } = useWeb3AuthDisconnect();
   const { userInfo } = useWeb3AuthUser();
-  const { provider } = useWeb3Auth();
+  const { connection } = useWeb3Auth();
+  const [privateKey, setPrivateKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!connection?.ethereumProvider) return;
+    (connection.ethereumProvider.request({ method: "private_key" }) as Promise<string>)
+      .then((k) => setPrivateKey(k ?? null))
+      .catch(console.error);
+  }, [connection]);
 
   const onGetPrivateKey = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    const privateKey = await getPrivateKey(provider);
-    uiConsole("Private Key", privateKey);
+    uiConsole("Private Key", privateKey ? "0x" + privateKey : null);
   };
 
   const onGetAccounts = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
+    if (!privateKey) {
+      uiConsole("Not connected yet");
       return;
     }
-    const userAccount = await getAccounts(provider);
+    const userAccount = await getAccounts(privateKey);
     uiConsole("Address", userAccount);
   };
 
   const onGetBalance = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
+    if (!privateKey) {
+      uiConsole("Not connected yet");
       return;
     }
-    const balance = await getBalance(provider);
+    const balance = await getBalance(privateKey);
     uiConsole("Balance", balance);
   };
 
   const onSendTransaction = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
+    if (!privateKey) {
+      uiConsole("Not connected yet");
       return;
     }
-    const result = await transferPolyx(provider);
+    const result = await transferPolyx(privateKey);
     uiConsole("Transaction", result);
   };
 
   const onGetIdentity = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
+    if (!privateKey) {
+      uiConsole("Not connected yet");
       return;
     }
-    const identity = await getIdentity(provider);
+    const identity = await getIdentity(privateKey);
+    uiConsole("Identity", identity);
   };
 
   function uiConsole(...args: any[]): void {
@@ -118,9 +123,9 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
       <h1 className="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/no-modal" rel="noreferrer">
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth{" "}
         </a>
         & POLYMESH Example

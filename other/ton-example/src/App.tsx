@@ -1,14 +1,23 @@
 import "./App.css";
+import { useEffect, useState } from "react";
 import {
   useWeb3AuthConnect, useWeb3AuthDisconnect, useWeb3AuthUser, useWeb3Auth
 } from "@web3auth/modal/react";
-import { getPrivateKey, getAccounts, getBalance, signMessage, signAndSendTransaction, getChainId } from "./tonRpc";
+import { getAccounts, getBalance, signMessage, signAndSendTransaction, getChainId } from "./tonRpc";
 
 function App() {
   const { connect, isConnected, loading: connectLoading, error: connectError } = useWeb3AuthConnect();
   const { disconnect, loading: disconnectLoading, error: disconnectError } = useWeb3AuthDisconnect();
   const { userInfo } = useWeb3AuthUser();
-  const { provider } = useWeb3Auth();
+  const { connection } = useWeb3Auth();
+  const [privateKey, setPrivateKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!connection?.ethereumProvider) return;
+    (connection.ethereumProvider.request({ method: "private_key" }) as Promise<string>)
+      .then((k) => setPrivateKey(k ?? null))
+      .catch(console.error);
+  }, [connection]);
 
   const onGetChainId = async () => {
     const chainId = getChainId();
@@ -16,47 +25,42 @@ function App() {
   };
 
   const onGetPrivateKey = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    const privateKey = await getPrivateKey(provider);
     uiConsole("Private Key", privateKey);
   };
 
   const onGetAccounts = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
+    if (!privateKey) {
+      uiConsole("Not connected yet");
       return;
     }
-    const userAccount = await getAccounts(provider);
+    const userAccount = await getAccounts(privateKey);
     uiConsole("Address", userAccount);
   };
 
   const onGetBalance = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
+    if (!privateKey) {
+      uiConsole("Not connected yet");
       return;
     }
-    const balance = await getBalance(provider);
+    const balance = await getBalance(privateKey);
     uiConsole("Balance", balance);
   };
 
   const onSignMessage = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
+    if (!privateKey) {
+      uiConsole("Not connected yet");
       return;
     }
-    const result = await signMessage(provider);
+    const result = await signMessage(privateKey);
     uiConsole("Signature", result);
   };
 
   const onSendTransaction = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
+    if (!privateKey) {
+      uiConsole("Not connected yet");
       return;
     }
-    const result = await signAndSendTransaction(provider);
+    const result = await signAndSendTransaction(privateKey);
     uiConsole("Transaction", result);
   };
 
@@ -129,9 +133,9 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
       <h1 className="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/no-modal" rel="noreferrer">
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth{" "}
         </a>
         & TON Example

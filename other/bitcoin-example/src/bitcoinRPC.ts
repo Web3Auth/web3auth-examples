@@ -2,29 +2,12 @@ import ecc from "@bitcoinerlab/secp256k1";
 import ECPairFactory from "ecpair";
 import { Psbt, networks, payments, crypto, initEccLib } from "bitcoinjs-lib";
 import axios from "axios";
-import type { IProvider } from "@web3auth/modal";
 
 // Initialize ECPair and ecc library
 const ECPair = ECPairFactory(ecc);
 initEccLib(ecc);
 
 const network = networks.testnet;
-
-// Function to get the private key from the provider
-export const getBitcoinPrivateKey = async (provider: IProvider): Promise<string> => {
-  if (!provider) throw new Error("Provider is required.");
-  try {
-    // Note: SFA uses "private_key", NoModal might use a different method
-    // or require configuration with a specific provider like BitcoinPrivateKeyProvider.
-    // Assuming private_key for now based on original code, may need adjustment.
-    const privateKey = await provider.request({ method: "private_key" });
-    if (!privateKey) throw new Error("Could not get private key from provider.");
-    return privateKey as string;
-  } catch (error) {
-    console.error("Error getting private key:", error);
-    throw error;
-  }
-};
 
 // Helper function to fetch UTXOs
 const fetchUtxos = async (address: string) => {
