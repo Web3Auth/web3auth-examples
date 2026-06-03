@@ -1,9 +1,12 @@
+"use client";
+
 import { useWeb3AuthConnect, useWeb3AuthDisconnect, useWeb3AuthUser } from "@web3auth/modal/react";
 // IMP START - Blockchain Calls  
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { SendTransaction } from "./wagmi/sendTransaction";
 import { Balance } from "./wagmi/getBalance";
 import { SwitchChain } from "./wagmi/switchNetwork";
+import { SignMessage } from "./wagmi/signMessage";
 // IMP END - Blockchain Calls
 
 function App() {
@@ -15,7 +18,7 @@ function App() {
   // IMP END - Logout
   const { userInfo } = useWeb3AuthUser();
   // IMP START - Blockchain Calls
-  const { address, connector } = useAccount();
+  const { address, connector } = useConnection();
   // IMP END - Blockchain Calls
 
   function uiConsole(...args: any[]): void {
@@ -51,6 +54,7 @@ function App() {
       {/* IMP START - Blockchain Calls */}
       <SendTransaction />
       <Balance />
+      <SignMessage />
       <SwitchChain />
       {/* IMP END - Blockchain Calls */}
     </div>
@@ -69,9 +73,9 @@ function App() {
   );
 
   return (
-    <div className="container">
+    <div className="w3a-example container">
       <h1 className="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/modal" rel="noreferrer">
+        <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth{" "}
         </a>
         & Next.js Modal Quick Start

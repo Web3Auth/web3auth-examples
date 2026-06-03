@@ -27,11 +27,11 @@
     ]
   },
   "include": [
-    "src",
-    "src/components/sendTransaction.tsx",
-    "src/components/switchNetwork.tsx",
-    "src/components/writeContract.tsx",
-    "src/components/getBalance.tsx",
+    "next-env.d.ts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "components/**/*.ts",
+    "components/**/*.tsx",
     ".next/types/**/*.ts"
   ],
   "references": [
