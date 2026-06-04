@@ -69,7 +69,7 @@ function App() {
         <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth{" "}
         </a>
-        & React Modal Quick Start
+        & React Modal Google Email Passwordless Grouped Example
       </h1>
 
       {isConnected ? loggedInView : unloggedInView}

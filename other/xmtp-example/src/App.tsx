@@ -123,11 +123,11 @@ function App() {
 
   return (
     <div style={styles.HomePageWrapperStyle}>
-      <h1>
+      <h1 className="title">
         <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth
         </a>{" "}
-        XMTP Quickstart
+        & XMTP Example
       </h1>
       <button 
         className="home-button" 

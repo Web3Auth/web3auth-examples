@@ -51,7 +51,7 @@ function App() {
         <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth{" "}
         </a>
-        & React No Modal AA Quick Start
+        & Smart Account Example
       </h1>
 
       <div className="grid">{isConnected ? loggedInView : unloggedInView}</div>

@@ -93,7 +93,7 @@ function App() {
         <a target="_blank" href="https://docs.sign.global/" rel="noreferrer">
           {" "}Sign Protocol{" "}
         </a>
-        Quick Start
+        Example
       </h1>
 
       {isConnected ? loggedInView : unloggedInView}
