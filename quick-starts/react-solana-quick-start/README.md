@@ -8,7 +8,7 @@ React + Vite boilerplate for **MetaMask Embedded Wallets (Web3Auth)** + **[Solan
 |--------|-------------------------------------------|----------------------------|
 | Login / logout | `useWeb3AuthConnect`, `useWeb3AuthDisconnect` | — |
 | Wallet address | `useSolanaWallet` → `accounts` | — |
-| Read chain / RPC | `useWeb3Auth` → `currentChain.rpcTarget` | `createSolanaRpc` for balance & blockhash |
+| Read chain / RPC | `useSolanaWallet` → `rpc` | — |
 | Sign message | `useSignMessage` | — |
 | Sign transaction | `useSignTransaction` | `buildSolTransferTransaction` |
 | Send transaction | `useSignAndSendTransaction` | `buildSolTransferTransaction` |

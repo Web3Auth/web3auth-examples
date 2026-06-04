@@ -1,30 +1,30 @@
 import {
-  useSignAndSendTransaction,
-  useSolanaWallet,
-} from "@web3auth/modal/react/solana";
-import { useWeb3Auth } from "@web3auth/modal/react";
-import {
-  Connection,
-  PublicKey,
-  SystemProgram,
-  Transaction,
-  TransactionInstruction,
-} from "@solana/web3.js";
-import { useEffect, useState } from "react";
-import {
-  resolve,
+  getDomainRecords,
   getPrimaryDomain,
-  getMultipleRecordsV2,
   Record,
-  devnet,
-} from "@bonfida/spl-name-service";
+  registerDomain,
+  resolveDomain,
+} from "@solana-name-service/sns-sdk-kit";
 import {
-  getAssociatedTokenAddressSync,
-  createAssociatedTokenAccountIdempotentInstruction,
-  createSyncNativeInstruction,
-  NATIVE_MINT,
-} from "@solana/spl-token";
-import axios from "axios";
+  address,
+  appendTransactionMessageInstructions,
+  compileTransaction,
+  createNoopSigner,
+  createTransactionMessage,
+  pipe,
+  setTransactionMessageFeePayerSigner,
+  setTransactionMessageLifetimeUsingBlockhash,
+  type Instruction,
+} from "@solana/kit";
+import {
+  findAssociatedTokenPda,
+  getCreateAssociatedTokenIdempotentInstructionAsync,
+  TOKEN_PROGRAM_ADDRESS,
+} from "@solana-program/token";
+import { useSignAndSendTransaction, useSolanaWallet } from "@web3auth/modal/react/solana";
+import { useCallback, useEffect, useState } from "react";
+
+const WSOL_MINT = address("So11111111111111111111111111111111111111112");
 
 interface DomainRecord {
   type: string;
@@ -33,11 +33,8 @@ interface DomainRecord {
 }
 
 export function SNS() {
-  const { accounts } = useSolanaWallet();
-  const { web3Auth } = useWeb3Auth();
-  // @bonfida/spl-name-service requires a web3.js Connection — narrow bridge until bonfida supports @solana/kit
-  const rpcTarget = web3Auth?.currentChain?.rpcTarget ?? "https://api.devnet.solana.com";
-  const connection = new Connection(rpcTarget);
+  const { accounts, rpc } = useSolanaWallet();
+  const { signAndSendTransaction } = useSignAndSendTransaction();
   const [domainInput, setDomainInput] = useState<string>("");
   const [registrationInput, setRegistrationInput] = useState<string>("");
   const [resolvedAddress, setResolvedAddress] = useState<string | null>(null);
@@ -46,106 +43,113 @@ export function SNS() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
-  const { signAndSendTransaction } = useSignAndSendTransaction();
 
-  // 1. Domain Registration
-  const registerDomain = async () => {
-    if (!accounts) return;
+  const fetchPrimaryDomain = useCallback(async () => {
+    if (!rpc || !accounts?.length) return;
 
-    const publicKey = new PublicKey(accounts[0]);
+    try {
+      setIsLoading(true);
+      setError(null);
+      const { domainName } = await getPrimaryDomain({
+        rpc,
+        walletAddress: address(accounts[0]),
+      });
+      setPrimaryDomain(domainName ? `${domainName}.sol` : "No primary domain set");
+    } catch {
+      setPrimaryDomain("No primary domain set");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [accounts, rpc]);
+
+  useEffect(() => {
+    if (accounts?.length) {
+      void fetchPrimaryDomain();
+    }
+  }, [accounts, fetchPrimaryDomain]);
+
+  async function registerDomainName() {
+    if (!rpc || !accounts?.length) return;
 
     if (await doesDomainExist(registrationInput)) {
       setError("Domain already exists");
       return;
     }
-    const ixs = [];
-    try {
-      setIsLoading(true);
-      const ata = getAssociatedTokenAddressSync(NATIVE_MINT, publicKey, false);
-
-      if (!ata) {
-        const createAtaIx = createAssociatedTokenAccountIdempotentInstruction(
-          publicKey,
-          ata,
-          publicKey,
-          NATIVE_MINT,
-        );
-        ixs.push(createAtaIx);
-      }
-
-      const regIx = await devnet.bindings.registerDomainNameV2(
-        connection,
-        registrationInput,
-        0,
-        publicKey,
-        ata,
-        NATIVE_MINT,
-      );
-
-      ixs.push(...regIx);
-      const { blockhash } = await connection.getLatestBlockhash();
-      const tx = new Transaction({
-        feePayer: publicKey,
-        recentBlockhash: blockhash,
-      }).add(...ixs);
-
-      // Bridge: bonfida builds a web3.js Transaction; cast to any until bonfida supports @solana/kit
-      const sig = await signAndSendTransaction(tx as any);
-
-      if (sig) {
-        setSuccess(true);
-      } else {
-        setError("Wallet or signature error");
-      }
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to register domain",
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // 2. Domain Resolution
-  const resolveDomain = async () => {
-    if (!domainInput.trim()) return;
 
     try {
       setIsLoading(true);
       setError(null);
-      const address = await resolve(connection, domainInput.trim());
-      setResolvedAddress(address.toString());
+      setSuccess(false);
+
+      const buyer = address(accounts[0]);
+      const feePayer = createNoopSigner(buyer);
+      const [buyerTokenAccount] = await findAssociatedTokenPda({
+        mint: WSOL_MINT,
+        owner: buyer,
+        tokenProgram: TOKEN_PROGRAM_ADDRESS,
+      });
+
+      const instructions: Instruction[] = [];
+      const ataInfo = await rpc.getAccountInfo(buyerTokenAccount, { encoding: "base64" }).send();
+      if (!ataInfo.value) {
+        instructions.push(
+          await getCreateAssociatedTokenIdempotentInstructionAsync({
+            payer: feePayer,
+            owner: buyer,
+            mint: WSOL_MINT,
+          }),
+        );
+      }
+
+      instructions.push(
+        ...(await registerDomain({
+          rpc,
+          domain: registrationInput,
+          space: 0,
+          buyer,
+          buyerTokenAccount,
+          mint: WSOL_MINT,
+        })),
+      );
+
+      const { value: latestBlockhash } = await rpc.getLatestBlockhash().send();
+      const message = pipe(
+        createTransactionMessage({ version: 0 }),
+        (m) => setTransactionMessageFeePayerSigner(feePayer, m),
+        (m) => setTransactionMessageLifetimeUsingBlockhash(latestBlockhash, m),
+        (m) => appendTransactionMessageInstructions(instructions, m),
+      );
+
+      const sig = await signAndSendTransaction(compileTransaction(message));
+      setSuccess(Boolean(sig));
+      if (!sig) {
+        setError("Wallet or signature error");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to register domain");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function resolveDomainName() {
+    if (!rpc || !domainInput.trim()) return;
+
+    try {
+      setIsLoading(true);
+      setError(null);
+      const owner = await resolveDomain({ rpc, domain: domainInput.trim() });
+      setResolvedAddress(owner);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to resolve domain");
       setResolvedAddress(null);
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
-  // 3. Primary Domain Lookup
-  const fetchPrimaryDomain = async () => {
-    if (!accounts || accounts.length === 0) return;
-
-    try {
-      setIsLoading(true);
-      setError(null);
-      const publicKey = new PublicKey(accounts[0]);
-      const { domain } = await getPrimaryDomain(connection, publicKey);
-      setPrimaryDomain(domain ? domain.toString() : "No primary domain set");
-    } catch (err) {
-      // setError(
-      //   err instanceof Error ? err.message : "Failed to fetch primary domain",
-      // );
-      setPrimaryDomain("No primary domain set");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // 4. Domain Records
-  const fetchDomainRecords = async () => {
-    if (!domainInput.trim()) return;
+  async function fetchDomainRecords() {
+    if (!rpc || !domainInput.trim()) return;
 
     try {
       setIsLoading(true);
@@ -157,80 +161,51 @@ export function SNS() {
         Record.Telegram,
         Record.Github,
         Record.Url,
-      ];
-      const recordOptions = { deserialize: true };
+      ] as const;
+      const recordTypeNames = ["Discord", "Twitter", "Telegram", "GitHub", "URL"];
 
-      const records = await getMultipleRecordsV2(
-        connection,
-        domainInput.trim(),
-        recordsToFetch,
-        recordOptions,
-      );
+      const records = await getDomainRecords({
+        rpc,
+        domain: domainInput.trim(),
+        records: [...recordsToFetch],
+        options: { deserialize: true },
+      });
 
       const processedRecords: DomainRecord[] = [];
-      const recordTypeNames = [
-        "Discord",
-        "Twitter",
-        "Telegram",
-        "GitHub",
-        "URL",
-      ];
-
       for (let i = 0; i < records.length; i++) {
         const record = records[i];
-        const recordTypeName = recordTypeNames[i];
-
-        if (record && record.retrievedRecord) {
+        if (record?.deserializedContent) {
           processedRecords.push({
-            type: recordTypeName,
-            content: record.retrievedRecord.toString(),
-            isVerified: true, // Simplified - assume verified if retrieved
+            type: recordTypeNames[i],
+            content: record.deserializedContent,
+            isVerified: Boolean(record.verified.roa),
           });
         }
       }
 
       setDomainRecords(processedRecords);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to fetch domain records",
-      );
+      setError(err instanceof Error ? err.message : "Failed to fetch domain records");
       setDomainRecords([]);
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
-  // Auto-fetch primary domain when connected
-  useEffect(() => {
-    if (accounts && accounts.length > 0) {
-      fetchPrimaryDomain();
-    }
-  }, [accounts, rpcTarget]);
+  function trimTldAndLowercase(value: string) {
+    const trimmed = value.endsWith(".sol") ? value.slice(0, -4) : value;
+    return trimmed.toLowerCase();
+  }
 
-  // Utils
-
-  const trimTldAndLowercase = (x: string) => {
-    if (x.endsWith(".sol")) {
-      x = x.slice(0, -4);
-    }
-    return x.toLowerCase();
-  };
-
-  const getRecordTypeName = (recordType: string): string => {
-    return recordType;
-  };
-
-  const doesDomainExist = async (domain: string) => {
-    const url = `https://sns-api.bonfida.com/v2/domains/exists/${domain}`;
-    const response = await axios.get(url);
-    return response.data;
-  };
+  async function doesDomainExist(domain: string) {
+    const response = await fetch(`https://sns-api.bonfida.com/v2/domains/exists/${domain}`);
+    return response.json();
+  }
 
   return (
     <div>
       <h2>SNS (Solana Name Service)</h2>
 
-      {/* Register Domain Section */}
       <div
         style={{
           marginBottom: "20px",
@@ -243,9 +218,7 @@ export function SNS() {
         <input
           type="text"
           value={registrationInput}
-          onChange={(e) =>
-            setRegistrationInput(trimTldAndLowercase(e.target.value))
-          }
+          onChange={(e) => setRegistrationInput(trimTldAndLowercase(e.target.value))}
           placeholder="Enter domain (e.g., sns)"
           style={{
             width: "200px",
@@ -255,16 +228,14 @@ export function SNS() {
             borderRadius: "4px",
           }}
         />
-        <button onClick={registerDomain} className="card">
+        <button onClick={() => void registerDomainName()} className="card">
           Register
         </button>
-
         <div style={{ marginTop: "10px", color: "#4CAF50" }}>
-          <span>Cost: $20 (~ 0.11 SOL) </span>
+          <span>Cost: paid in wSOL from your wallet&apos;s token account</span>
         </div>
       </div>
 
-      {/* Primary Domain Section */}
       <div
         style={{
           marginBottom: "20px",
@@ -275,20 +246,13 @@ export function SNS() {
       >
         <h3>Your Primary Domain</h3>
         {primaryDomain && (
-          <div style={{ color: "#4CAF50", fontWeight: "bold" }}>
-            {primaryDomain}
-          </div>
+          <div style={{ color: "#4CAF50", fontWeight: "bold" }}>{primaryDomain}</div>
         )}
-        <button
-          onClick={fetchPrimaryDomain}
-          className="card"
-          style={{ marginTop: "10px" }}
-        >
+        <button onClick={() => void fetchPrimaryDomain()} className="card" style={{ marginTop: "10px" }}>
           Refresh Primary Domain
         </button>
       </div>
 
-      {/* Domain Resolution Section */}
       <div
         style={{
           marginBottom: "20px",
@@ -311,7 +275,7 @@ export function SNS() {
             borderRadius: "4px",
           }}
         />
-        <button onClick={resolveDomain} className="card">
+        <button onClick={() => void resolveDomainName()} className="card">
           Resolve
         </button>
         {resolvedAddress && (
@@ -321,7 +285,6 @@ export function SNS() {
         )}
       </div>
 
-      {/* Domain Records Section */}
       <div
         style={{
           marginBottom: "20px",
@@ -331,14 +294,14 @@ export function SNS() {
         }}
       >
         <h3>Domain Records</h3>
-        <button onClick={fetchDomainRecords} className="card">
+        <button onClick={() => void fetchDomainRecords()} className="card">
           Fetch Records for {domainInput || "Enter domain above"}
         </button>
         {domainRecords.length > 0 && (
           <div style={{ marginTop: "10px" }}>
-            {domainRecords.map((record, index) => (
+            {domainRecords.map((record) => (
               <div
-                key={index}
+                key={record.type}
                 style={{
                   marginBottom: "8px",
                   padding: "8px",
@@ -346,8 +309,7 @@ export function SNS() {
                   borderRadius: "4px",
                 }}
               >
-                <strong>{getRecordTypeName(record.type)}:</strong>{" "}
-                {record.content}
+                <strong>{record.type}:</strong> {record.content}
                 <span
                   style={{
                     marginLeft: "10px",
@@ -363,7 +325,6 @@ export function SNS() {
         )}
       </div>
 
-      {/* Loading and Error and Success States */}
       {isLoading && <div className="loading">Loading...</div>}
       {error && <div className="error">Error: {error}</div>}
       {success && <div className="text-green-500">Success!</div>}

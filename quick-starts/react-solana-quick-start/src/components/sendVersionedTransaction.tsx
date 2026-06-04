@@ -1,5 +1,4 @@
 import { FormEvent, useState } from "react";
-import { useWeb3Auth } from "@web3auth/modal/react";
 import { useSolanaWallet, useSignAndSendTransaction } from "@web3auth/modal/react/solana";
 
 import { buildSolTransferTransaction } from "../solana/transfer";
@@ -7,8 +6,7 @@ import { buildSolTransferTransaction } from "../solana/transfer";
 // Build a SOL transfer with Solana Kit, then sign AND broadcast it with the
 // embedded wallet. `signature` is the base58 transaction signature.
 export function SendVersionedTransaction() {
-  const { web3Auth } = useWeb3Auth();
-  const { accounts } = useSolanaWallet();
+  const { accounts, rpc } = useSolanaWallet();
   const { data: signature, error, loading: isPending, signAndSendTransaction } = useSignAndSendTransaction();
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -16,8 +14,7 @@ export function SendVersionedTransaction() {
     e.preventDefault();
     setFormError(null);
 
-    const rpcTarget = web3Auth?.currentChain?.rpcTarget;
-    if (!rpcTarget || !accounts?.length) return;
+    if (!rpc || !accounts?.length) return;
 
     const form = new FormData(e.currentTarget);
     const to = form.get("address")?.toString().trim() ?? "";
@@ -28,7 +25,7 @@ export function SendVersionedTransaction() {
     }
 
     try {
-      const transaction = await buildSolTransferTransaction(rpcTarget, accounts[0], to, amountSol);
+      const transaction = await buildSolTransferTransaction(rpc, accounts[0], to, amountSol);
       await signAndSendTransaction(transaction);
     } catch (err) {
       setFormError(err instanceof Error ? err.message : "Failed to send transaction.");

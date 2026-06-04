@@ -1,69 +1,49 @@
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { useSolanaWallet, useSignTransaction } from "@web3auth/modal/react/solana";
-import {
-  address,
-  appendTransactionMessageInstruction,
-  compileTransaction,
-  createNoopSigner,
-  createTransactionMessage,
-  lamports,
-  pipe,
-  setTransactionMessageFeePayerSigner,
-  setTransactionMessageLifetimeUsingBlockhash,
-} from "@solana/kit";
-import { getTransferSolInstruction } from "@solana-program/system";
 
+import { buildSolTransferTransaction } from "../solana/transfer";
+
+// Build a SOL transfer with Solana Kit, then sign it with the embedded wallet
+// WITHOUT broadcasting. `signedTransaction` is the base64 signed transaction.
 export function SignTransaction() {
-  const { data: signedTransaction, error, loading: isPending, signTransaction } = useSignTransaction();
   const { accounts, rpc } = useSolanaWallet();
+  const { data: signedTransaction, error, loading: isPending, signTransaction } = useSignTransaction();
+  const [formError, setFormError] = useState<string | null>(null);
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const to = formData.get("address") as string;
-    const value = formData.get("value") as string;
+    setFormError(null);
 
-    if (!rpc || !accounts) return;
+    if (!rpc || !accounts?.length) return;
 
-    const { value: latestBlockhash } = await rpc.getLatestBlockhash().send();
+    const form = new FormData(e.currentTarget);
+    const to = form.get("address")?.toString().trim() ?? "";
+    const amountSol = Number(form.get("value"));
+    if (!to || !Number.isFinite(amountSol) || amountSol <= 0) {
+      setFormError("Enter a valid recipient address and a positive amount.");
+      return;
+    }
 
-    const feePayer = createNoopSigner(address(accounts[0]));
-    const message = pipe(
-      createTransactionMessage({ version: 0 }),
-      (m) => setTransactionMessageFeePayerSigner(feePayer, m),
-      (m) => setTransactionMessageLifetimeUsingBlockhash(latestBlockhash, m),
-      (m) =>
-        appendTransactionMessageInstruction(
-          getTransferSolInstruction({
-            source: feePayer,
-            destination: address(to),
-            amount: lamports(BigInt(Math.floor(Number(value) * 1e9))),
-          }),
-          m,
-        ),
-    );
-
-    signTransaction(compileTransaction(message));
+    try {
+      const transaction = await buildSolTransferTransaction(rpc, accounts[0], to, amountSol);
+      await signTransaction(transaction);
+    } catch (err) {
+      setFormError(err instanceof Error ? err.message : "Failed to sign transaction.");
+    }
   }
 
   return (
     <div>
       <h2>Sign Transaction</h2>
       <form onSubmit={submit}>
-        <input name="address" placeholder="Address" required />
-        <input
-          name="value"
-          placeholder="Amount (SOL)"
-          type="number"
-          step="0.01"
-          required
-        />
+        <input name="address" placeholder="Recipient address" required />
+        <input name="value" placeholder="Amount (SOL)" type="number" step="0.01" min="0" required />
         <button disabled={isPending} type="submit">
           {isPending ? "Signing..." : "Sign"}
         </button>
       </form>
-      {signedTransaction && <div>Signed Transaction: {signedTransaction}</div>}
-      {error && <div>Error: {error.message}</div>}
+      {signedTransaction && <div className="hash">Signed transaction: {signedTransaction}</div>}
+      {(formError ?? error?.message) && <div className="error">Error: {formError ?? error?.message}</div>}
     </div>
   );
 }

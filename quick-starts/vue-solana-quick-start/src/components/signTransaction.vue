@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useWeb3Auth } from "@web3auth/modal/vue";
 import { useSolanaWallet, useSignTransaction } from "@web3auth/modal/vue/solana";
 
 import { buildSolTransferTransaction } from "../solana/transfer";
 
 // Build a SOL transfer with Solana Kit, then sign it with the embedded wallet
 // WITHOUT broadcasting. `signedTransaction` is the base64 signed transaction.
-const { web3Auth } = useWeb3Auth();
-const { accounts } = useSolanaWallet();
+const { accounts, rpc } = useSolanaWallet();
 const { data: signedTransaction, error, loading: isPending, signTransaction } = useSignTransaction();
 const formError = ref<string | null>(null);
 
@@ -16,8 +14,7 @@ async function submit(event: Event) {
   event.preventDefault();
   formError.value = null;
 
-  const rpcTarget = web3Auth.value?.currentChain?.rpcTarget;
-  if (!rpcTarget || !accounts.value?.length) return;
+  if (!rpc.value || !accounts.value?.length) return;
 
   const form = new FormData(event.target as HTMLFormElement);
   const to = form.get("address")?.toString().trim() ?? "";
@@ -28,7 +25,7 @@ async function submit(event: Event) {
   }
 
   try {
-    const transaction = await buildSolTransferTransaction(rpcTarget, accounts.value[0], to, amountSol);
+    const transaction = await buildSolTransferTransaction(rpc.value, accounts.value[0], to, amountSol);
     await signTransaction(transaction);
   } catch (err) {
     formError.value = err instanceof Error ? err.message : "Failed to sign transaction.";

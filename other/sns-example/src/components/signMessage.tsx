@@ -2,13 +2,13 @@ import { FormEvent } from "react";
 import { useSignMessage } from "@web3auth/modal/react/solana";
 
 export function SignMessage() {
-  const { data: hash, error, loading: isPending, signMessage } = useSignMessage();
+  const { data: signature, error, loading: isPending, signMessage } = useSignMessage();
 
-  async function submit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    const formData = new FormData(e.target as HTMLFormElement)
-    const message = formData.get('message')
-    signMessage(message!.toString());
+  function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const message = new FormData(e.currentTarget).get("message")?.toString().trim();
+    if (!message) return;
+    void signMessage(message);
   }
 
   return (
@@ -17,13 +17,11 @@ export function SignMessage() {
       <form onSubmit={submit}>
         <input name="message" placeholder="Message" required />
         <button disabled={isPending} type="submit">
-          {isPending ? 'Signing...' : 'Sign'}
+          {isPending ? "Signing..." : "Sign"}
         </button>
       </form>
-      {hash && <div className="hash">Message Hash: {hash}</div>}
-      {error && (
-        <div className="error">Error: {error.message}</div>
-      )}
+      {signature && <div className="hash">Signature: {signature}</div>}
+      {error && <div className="error">Error: {error.message}</div>}
     </div>
-  )
+  );
 }

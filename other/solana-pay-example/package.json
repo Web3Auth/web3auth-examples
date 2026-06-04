@@ -12,13 +12,17 @@
   },
   "//IMP START": "IMP START - Web3Auth Installation",
   "dependencies": {
+    "@solana-program/memo": "^0.11.0",
     "@solana-program/system": "^0.12.0",
-    "@solana/kit": "^6.8.0",
-    "@solana/pay": "^0.2.6",
+    "@solana-program/token": "^0.12.0",
+    "@solana-program/token-2022": "^0.9.0",
+    "@solana/kit": "^6.9.0",
+    "@solana/kit-plugin-instruction-plan": "^0.10.0",
+    "@solana/kit-plugin-rpc": "^0.11.1",
+    "@solana/kit-plugin-signer": "^0.10.0",
+    "@solana/pay": "^1.0.17",
     "@solana/react-hooks": "^1.4.0",
-    "@solana/web3.js": "^1.98.4",
     "@web3auth/modal": "^11.0.1",
-    "bignumber.js": "^9.1.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -27,9 +31,9 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
-    "typescript": "^5.7.3",
-    "vite": "^5.4.0",
     "buffer": "^6.0.3",
-    "process": "^0.11.10"
+    "process": "^0.11.10",
+    "typescript": "^5.7.3",
+    "vite": "^5.4.0"
   }
 }

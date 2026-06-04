@@ -1,27 +1,21 @@
 <script setup lang="ts">
-import { address, createSolanaRpc } from "@solana/kit";
+import { address } from "@solana/kit";
 import { ref } from "vue";
-import { useWeb3Auth } from "@web3auth/modal/vue";
 import { useSolanaWallet } from "@web3auth/modal/vue/solana";
 
-const { web3Auth } = useWeb3Auth();
-const { accounts } = useSolanaWallet();
+const { accounts, rpc } = useSolanaWallet();
 
 const balance = ref<string | null>(null);
 const loading = ref(false);
 const error = ref<string | null>(null);
 
-// Reads the RPC endpoint from the chain configured in the Web3Auth Dashboard,
-// so the balance always reflects the currently selected chain.
 async function fetchBalance() {
-  const rpcTarget = web3Auth.value?.currentChain?.rpcTarget;
-  if (!rpcTarget || !accounts.value?.length) return;
+  if (!rpc.value || !accounts.value?.length) return;
 
   loading.value = true;
   error.value = null;
   try {
-    const rpc = createSolanaRpc(rpcTarget);
-    const { value } = await rpc.getBalance(address(accounts.value[0])).send();
+    const { value } = await rpc.value.getBalance(address(accounts.value[0])).send();
     balance.value = `${Number(value) / 1e9} SOL`;
   } catch (e) {
     error.value = e instanceof Error ? e.message : "Failed to fetch balance.";

@@ -1,23 +1,19 @@
-import { address, createSolanaRpc } from "@solana/kit";
+import { address } from "@solana/kit";
 import { useState } from "react";
-import { useWeb3Auth } from "@web3auth/modal/react";
 import { useSolanaWallet } from "@web3auth/modal/react/solana";
 
 export function Balance() {
-  const { web3Auth } = useWeb3Auth();
-  const { accounts } = useSolanaWallet();
+  const { accounts, rpc } = useSolanaWallet();
   const [balance, setBalance] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function fetchBalance() {
-    const rpcTarget = web3Auth?.currentChain?.rpcTarget;
-    if (!rpcTarget || !accounts?.length) return;
+    if (!rpc || !accounts?.length) return;
 
     setIsLoading(true);
     setError(null);
     try {
-      const rpc = createSolanaRpc(rpcTarget);
       const { value } = await rpc.getBalance(address(accounts[0])).send();
       setBalance(`${Number(value) / 1e9} SOL`);
     } catch (err) {

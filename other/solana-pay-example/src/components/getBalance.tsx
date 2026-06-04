@@ -1,42 +1,36 @@
-import { useSolanaWallet } from "@web3auth/modal/react/solana";
 import { address } from "@solana/kit";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useSolanaWallet } from "@web3auth/modal/react/solana";
 
 export function Balance() {
   const { accounts, rpc } = useSolanaWallet();
-  const [balance, setBalance] = useState<number | null>(null);
+  const [balance, setBalance] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchBalance = async () => {
-    if (!rpc || !accounts || accounts.length === 0) return;
+  async function fetchBalance() {
+    if (!rpc || !accounts?.length) return;
+
+    setIsLoading(true);
+    setError(null);
     try {
-      setIsLoading(true);
-      setError(null);
       const { value } = await rpc.getBalance(address(accounts[0])).send();
-      setBalance(Number(value) / 1e9);
+      setBalance(`${Number(value) / 1e9} SOL`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error");
+      setError(err instanceof Error ? err.message : "Failed to fetch balance.");
     } finally {
       setIsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchBalance();
-  }, [rpc, accounts]);
+  }
 
   return (
     <div>
       <h2>Balance</h2>
-      <div>
-        {balance !== null && `${balance} SOL`}
-      </div>
-      {isLoading && <span className="loading">Loading...</span>}
-      {error && <span className="error">Error: {error}</span>}
-      <button onClick={fetchBalance} type="submit" className="card">
-        Fetch Balance
+      {balance && <div>{balance}</div>}
+      <button onClick={() => void fetchBalance()} type="button" className="card" disabled={isLoading}>
+        {isLoading ? "Fetching..." : "Fetch Balance"}
       </button>
+      {error && <div className="error">Error: {error}</div>}
     </div>
   );
 }
