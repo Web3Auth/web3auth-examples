@@ -12,11 +12,12 @@
   },
   "//IMP START": "IMP START - Web3Auth Installation",
   "dependencies": {
-    "@web3auth/modal": "^11.0.1",
+    "@web3auth/modal": "^11.0.2",
     "@xmtp/react-sdk": "^6.0.0",
     "ethers": "^6.13.2",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "buffer": "^6.0.3"
   },
   "//IMP END": "IMP END - Web3Auth Installation",
   "devDependencies": {
@@ -30,8 +31,6 @@
     "@types/react-dom": "^18.3.0",
     "@types/semver": "^7.5.8",
     "@vitejs/plugin-react": "^4.3.1",
-    "buffer": "^6.0.3",
-    "process": "^0.11.10",
     "typescript": "^5.7.3",
     "vite": "^5.3.5"
   }

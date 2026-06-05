@@ -10,21 +10,20 @@
     "@taquito/taquito": "^19.0.1",
     "@taquito/utils": "^19.0.1",
     "@tezos-core-tools/crypto-utils": "^0.0.7",
-    "@web3auth/modal": "^11.0.1",
+    "@web3auth/modal": "^11.0.2",
     "ethers": "^6.10.0",
     "near-api-js": "^4.0.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tweetnacl": "^1.0.3"
+    "tweetnacl": "^1.0.3",
+    "buffer": "^6.0.3"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "typescript": "^5.7.3",
-    "vite": "^5.4.0",
-    "buffer": "^6.0.3",
-    "process": "^0.11.10"
+    "vite": "^5.4.0"
   },
   "scripts": {
     "start": "vite",

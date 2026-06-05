@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@web3auth/modal": "^11.0.1",
+    "@web3auth/modal": "^11.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tronweb": "^4.4.0"
@@ -17,9 +17,7 @@
     "secp256k1": "^5.0.0",
     "typescript": "^5.7.3",
     "utils": "^0.3.1",
-    "vite": "^5.4.0",
-    "buffer": "^6.0.3",
-    "process": "^0.11.10"
+    "vite": "^5.4.0"
   },
   "scripts": {
     "start": "vite",

@@ -5,7 +5,7 @@
   "dependencies": {
     "@polymeshassociation/local-signing-manager": "^3.5.0",
     "@polymeshassociation/polymesh-sdk": "^27.5.1",
-    "@web3auth/modal": "^11.0.1",
+    "@web3auth/modal": "^11.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -15,9 +15,7 @@
     "@vitejs/plugin-react": "^4.3.1",
     "typescript": "^5.7.3",
     "vite": "^5.4.0",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "buffer": "^6.0.3",
-    "process": "^0.11.10"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   },
   "scripts": {
     "start": "vite",

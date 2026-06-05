@@ -1,3 +1,4 @@
+import { Buffer } from "buffer";
 import React, { useState, useEffect } from "react";
 import { ethers, Signer } from "ethers";
 import { Client, useClient } from "@xmtp/react-sdk";

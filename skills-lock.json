@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "web3auth": {
+      "source": "web3auth/skill",
+      "sourceType": "github",
+      "skillPath": "skills/web3auth/SKILL.md",
+      "computedHash": "b2d37fe412d73cd873db4dd4a1b5a79019b3847933524e8a8696e82a1a36d84f"
+    }
+  }
+}

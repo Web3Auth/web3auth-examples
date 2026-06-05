@@ -1,3 +1,4 @@
+import { Buffer } from "buffer";
 import ecc from "@bitcoinerlab/secp256k1";
 import ECPairFactory from "ecpair";
 import { Psbt, networks, payments, crypto, initEccLib } from "bitcoinjs-lib";

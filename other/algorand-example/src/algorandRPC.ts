@@ -1,3 +1,4 @@
+import { Buffer } from "buffer";
 import algosdk from "algosdk";
 
 export const makeClient = async (): Promise<algosdk.Algodv2> => {

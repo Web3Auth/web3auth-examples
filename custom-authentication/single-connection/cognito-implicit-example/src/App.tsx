@@ -23,7 +23,7 @@ function App() {
       extraLoginOptions: {
         client_id: "2upuksfh6n0n5c0nciirc1bdrv",
         domain: "https://shahbaz-web3auth.auth.ap-south-1.amazoncognito.com",
-        verifierIdField: "email",
+        userIdField: "email",
         response_type: "token",
         scope: "email profile openid",
       },

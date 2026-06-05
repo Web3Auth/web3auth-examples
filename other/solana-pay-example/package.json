@@ -22,7 +22,7 @@
     "@solana/kit-plugin-signer": "^0.10.0",
     "@solana/pay": "^1.0.17",
     "@solana/react-hooks": "^1.4.0",
-    "@web3auth/modal": "^11.0.1",
+    "@web3auth/modal": "^11.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -31,8 +31,6 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
-    "buffer": "^6.0.3",
-    "process": "^0.11.10",
     "typescript": "^5.7.3",
     "vite": "^5.4.0"
   }

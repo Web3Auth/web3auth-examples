@@ -148,7 +148,7 @@ function App() {
         <a target="_blank" href="https://docs.metamask.io/embedded-wallets/sdk/react/" rel="noreferrer">
           Web3Auth
         </a>{" "}
-        & Bitcoin No Modal Example
+        & Bitcoin Example
       </h1>
       <div className="grid">{isConnected ? loggedInView : unloggedInView}</div>
       <div id="console" style={{ whiteSpace: "pre-line" }}>

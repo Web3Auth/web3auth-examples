@@ -1,4 +1,5 @@
 // Solana
+import { Buffer } from "buffer";
 import { Keypair, Connection } from "@solana/web3.js";
 import { IProvider, getED25519Key } from "@web3auth/modal";
 import nacl from "tweetnacl";

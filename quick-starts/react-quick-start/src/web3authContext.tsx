@@ -1,5 +1,5 @@
 // IMP START - Quick Start
-import { CHAIN_NAMESPACES, WEB3AUTH_NETWORK } from "@web3auth/modal";
+import { WEB3AUTH_NETWORK } from "@web3auth/modal";
 import { type Web3AuthContextConfig } from "@web3auth/modal/react";
 // IMP END - Quick Start
 

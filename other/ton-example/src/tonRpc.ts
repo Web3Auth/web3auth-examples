@@ -1,3 +1,4 @@
+import { Buffer } from "buffer";
 import { getHttpEndpoint } from "@orbs-network/ton-access";
 import TonWeb from "tonweb";
 

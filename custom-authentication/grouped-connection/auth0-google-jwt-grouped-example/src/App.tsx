@@ -26,7 +26,7 @@ function App() {
       idToken,
       extraLoginOptions: {
         isUserIdCaseSensitive: false,
-        verifierIdField: "email",
+        userIdField: "email",
       },
     });
   };
@@ -45,7 +45,7 @@ function App() {
         idToken,
         extraLoginOptions: {
           isUserIdCaseSensitive: false,
-          verifierIdField: "email",
+          userIdField: "email",
         },
       });
 

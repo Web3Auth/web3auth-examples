@@ -6,7 +6,7 @@ This repository contains ready-to-run examples across frameworks, blockchains, a
 
 ## Prerequisites
 
-- Node.js 20+
+- Node.js 22+
 - npm
 - A Client ID from the [Dashboard](https://dashboard.web3auth.io)
 

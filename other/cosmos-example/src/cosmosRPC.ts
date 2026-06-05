@@ -1,3 +1,4 @@
+import { Buffer } from "buffer";
 import { SigningStargateClient, StargateClient } from "@cosmjs/stargate";
 import { DirectSecp256k1Wallet, OfflineDirectSigner } from "@cosmjs/proto-signing";
 
