@@ -17,5 +17,9 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jsonwebtoken": "^8.5.1"
+  },
+  "engines": {
+    "node": ">=22.12.0",
+    "npm": ">=10"
   }
 }

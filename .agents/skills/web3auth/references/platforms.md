@@ -5,7 +5,7 @@ Authoritative capability matrix for Embedded Wallets SDKs. Read the section for 
 ## React / Next.js / Vite (@web3auth/modal v11)
 
 - Provider-based architecture. All hooks inside provider tree.
-- Node.js 22+ for `@web3auth/modal@11`.
+- Node.js 22.12+ for `@web3auth/modal@11`.
 - Next.js App Router: provider in `"use client"` component. Never put provider in a Next.js server component.
 - Modal (pre-built UI) via `connect()`. Modal UI can be customised on dashboard, supports only implicit logins.
 - No Modal (create your own UI buttons) via `connectTo()`. Works best for custom authentication flows.
@@ -16,7 +16,7 @@ Authoritative capability matrix for Embedded Wallets SDKs. Read the section for 
 ## Vue / Nuxt (@web3auth/modal v11)
 
 - Composables in `setup()` or `<script setup>`.
-- Node.js 22+ for `@web3auth/modal@11`.
+- Node.js 22.12+ for `@web3auth/modal@11`.
 - Modal (pre-built UI) via `connect()`. Modal UI can be customised on dashboard, supports only implicit logins.
 - No Modal (create your own UI buttons) via `connectTo()`. Works best for custom authentication flows.
 - **EVM composables:** Wagmi v3 from `@web3auth/modal/vue/wagmi` — not generic Wagmi alone.
@@ -26,7 +26,7 @@ Authoritative capability matrix for Embedded Wallets SDKs. Read the section for 
 ## JavaScript (Angular / Svelte / Vanilla)
 
 - Direct `Web3Auth` class; `init()` in constructor
-- Node.js 22+ for `@web3auth/modal@11`.
+- Node.js 22.12+ for `@web3auth/modal@11`.
 - Modal (pre-built UI) via `connect()`. Modal UI can be customised on dashboard, supports only implicit logins.
 - No Modal (create your own UI buttons) via `connectTo()`. Works best for custom authentication flows.
 - `connection.ethereumProvider` is for edge cases only (private/ public key export, or custom JSON-RPC not added in dashboard). Useful for non EVM flows.

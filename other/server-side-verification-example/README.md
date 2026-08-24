@@ -4,7 +4,7 @@ Next.js example demonstrating how to **verify a Web3Auth `id_token` on the backe
 
 ## Prerequisites
 
-- Node.js 20+
+- Node.js 22.12+
 - npm
 - A Client ID from the [Dashboard](https://dashboard.web3auth.io)
 

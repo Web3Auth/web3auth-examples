@@ -4,7 +4,7 @@ React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) with 
 
 ## Prerequisites
 
-- Node.js 20+
+- Node.js 22.12+
 - npm
 - A Client ID from the [Dashboard](https://dashboard.web3auth.io)
 - An AWS Cognito User Pool and a custom Cognito connection configured on the Dashboard ([Cognito guide](https://docs.metamask.io/embedded-wallets/authentication/custom-connections/aws-cognito/))

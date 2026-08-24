@@ -6,7 +6,7 @@ React + Vite example using MetaMask Embedded Wallets (powered by Web3Auth) with 
 
 ## Prerequisites
 
-- Node.js 20+
+- Node.js 22.12+
 - npm
 - A Client ID from the [Dashboard](https://dashboard.web3auth.io)
 - An Auth0 application — get your Auth0 Client ID and domain ([Auth0 guide](https://docs.metamask.io/embedded-wallets/authentication/custom-connections/auth0/))

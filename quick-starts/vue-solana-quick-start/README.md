@@ -19,7 +19,7 @@ Kit is only used to **build** transfer transactions. Signing and RPC endpoints c
 
 ## Prerequisites
 
-- Node.js 20+
+- Node.js 22.12+
 - npm
 - A Client ID from the [Dashboard](https://dashboard.web3auth.io) — add Solana chain(s) under **Chains & Networks** (RPC URLs come from the dashboard; this app does not hardcode them)
 

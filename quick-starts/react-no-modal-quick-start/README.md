@@ -4,7 +4,7 @@ Headless React + Vite example using MetaMask Embedded Wallets (powered by Web3Au
 
 ## Prerequisites
 
-- Node.js 20+
+- Node.js 22.12+
 - npm
 - A Client ID from the [Dashboard](https://dashboard.web3auth.io)
 

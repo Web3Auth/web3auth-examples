@@ -24,5 +24,9 @@
     "preview": "vite preview",
     "lint": "eslint"
   },
-  "type": "module"
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0",
+    "npm": ">=10"
+  }
 }
