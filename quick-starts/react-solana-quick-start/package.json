@@ -16,7 +16,7 @@
     "@solana-program/system": "^0.12.0",
     "@solana/kit": "^6.9.0",
     "@solana/react-hooks": "^1.4.0",
-    "@web3auth/modal": "^11.0.2",
+    "@web3auth/modal": "^11.4.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -26,7 +26,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "typescript": "^5.5.4",
-    "vite": "^6.4.1"
+    "vite": "^6.4.6"
   },
   "engines": {
     "node": ">=22.12.0",

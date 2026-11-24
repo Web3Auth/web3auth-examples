@@ -13,7 +13,7 @@
   "dependencies": {
     "@tanstack/vue-query": "^5.74.6",
     "@wagmi/vue": "^0.5.17",
-    "@web3auth/modal": "^11.0.2",
+    "@web3auth/modal": "^11.4.3",
     "viem": "^2.48.4",
     "vue": "^3.5.13"
   },
@@ -21,8 +21,8 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.4",
     "typescript": "^5.7.3",
-    "vite": "^5.4.0",
-    "vue-tsc": "^2.2.12"
+    "vite": "^8.3.8",
+    "vue-tsc": "^3.3.14"
   },
   "engines": {
     "node": ">=22.12.0",
